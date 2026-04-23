@@ -1,0 +1,34 @@
+[
+  {
+    "kb_id": "kb_public",
+    "name": "公共知识库",
+    "visibility": "public",
+    "departments": [],
+    "roles": [],
+    "user_ids": []
+  },
+  {
+    "kb_id": "kb_rd",
+    "name": "研发知识库",
+    "visibility": "department",
+    "departments": [
+      "rd",
+      "engineering",
+      "tech"
+    ],
+    "roles": [],
+    "user_ids": []
+  },
+  {
+    "kb_id": "kb_hr",
+    "name": "人事知识库",
+    "visibility": "department",
+    "departments": [
+      "hr"
+    ],
+    "roles": [
+      "hr_admin"
+    ],
+    "user_ids": []
+  }
+]

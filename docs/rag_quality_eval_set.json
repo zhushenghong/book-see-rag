@@ -1,0 +1,195 @@
+{
+  "name": "rag_quality_eval_set",
+  "description": "Rule-based evaluation set for docs/rag_quality_test.docx. Each case checks answer key points and whether retrieved citations contain expected evidence.",
+  "cases": [
+    {
+      "id": "project_dates",
+      "question": "星澜知识助手项目什么时候启动，第一阶段计划什么时候完成？",
+      "required_answer_terms": ["2026 年 3 月 1 日", "2026 年 5 月 15 日"],
+      "relevant_source_terms": ["2026 年 3 月 1 日启动", "2026 年 5 月 15 日前完成内部试点"],
+      "forbidden_answer_terms": ["2 月 1 15 日", "2月1日"]
+    },
+    {
+      "id": "project_owners",
+      "question": "项目负责人、技术负责人、产品负责人分别是谁？",
+      "required_answer_terms": ["陈舟", "林远", "周棠"],
+      "relevant_source_terms": ["项目负责人是陈舟", "技术负责人是林远", "产品负责人是周棠"]
+    },
+    {
+      "id": "pilot_scope",
+      "question": "第一阶段试点总共多少人？研发、人事、综合管理分别多少人？",
+      "required_answer_terms": ["30 名员工", "研发部门 18 人", "人事部门 5 人", "综合管理部门 7 人"],
+      "relevant_source_terms": ["第一阶段试点范围包括 30 名员工", "研发部门 18 人", "人事部门 5 人", "综合管理部门 7 人"]
+    },
+    {
+      "id": "tech_stack",
+      "question": "当前系统用了哪些技术栈？",
+      "required_answer_terms": ["Milvus", "Redis", "FastAPI", "Streamlit", "Celery"],
+      "relevant_source_terms": ["Milvus 作为向量数据库", "Redis 保存多轮会话记忆", "FastAPI 提供后端接口", "Streamlit 提供管理和问答页面", "Celery 负责异步文档摄入任务"]
+    },
+    {
+      "id": "supported_formats",
+      "question": "当前系统支持哪些文件格式？",
+      "required_answer_terms": ["PDF", "DOCX", "TXT", "Markdown"],
+      "relevant_source_terms": ["系统目前支持四种文件格式：PDF、DOCX、TXT、Markdown"]
+    },
+    {
+      "id": "rag_vs_llm",
+      "question": "RAG 和普通大模型问答有什么区别？",
+      "required_answer_terms": ["先从知识库检索证据", "基于证据回答"],
+      "relevant_source_terms": ["RAG 的关键是先从知识库检索证据", "再让大模型基于证据回答"]
+    },
+    {
+      "id": "chunk_vs_tokenization",
+      "question": "chunk 和中文分词是一回事吗？为什么？",
+      "required_answer_terms": ["不是中文分词", "较大的文本片段", "分词通常是把句子切成词或 token"],
+      "relevant_source_terms": ["Chunk 不是中文分词", "chunk 是较大的文本片段", "分词通常是把句子切成词或 token"]
+    },
+    {
+      "id": "embedding_granularity",
+      "question": "embedding 是对整个文件做一次，还是对 chunk 分别做？",
+      "required_answer_terms": ["对切分后的 chunk 分别做 embedding", "不是对整个文件只做一次"],
+      "relevant_source_terms": ["Embedding 不是对整个文件只做一次", "对切分后的 chunk 分别做 embedding"]
+    },
+    {
+      "id": "chunk_size_overlap",
+      "question": "chunk_size 和 chunk_overlap 分别是什么意思？",
+      "required_answer_terms": ["chunk_size 表示单个文本片段的最大长度", "chunk_overlap 表示相邻 chunk 之间重复保留的字符数量"],
+      "relevant_source_terms": ["chunk_size 表示单个文本片段的最大长度", "chunk_overlap 表示相邻 chunk 之间重复保留的字符数量"]
+    },
+    {
+      "id": "chunk_too_large_small",
+      "question": "为什么 chunk 太大或太小都会影响 RAG 效果？",
+      "required_answer_terms": ["chunk 太小会导致上下文被切碎", "chunk 太大会引入过多无关信息"],
+      "relevant_source_terms": ["chunk 太小会导致上下文被切碎", "chunk 太大会引入过多无关信息"]
+    },
+    {
+      "id": "bm25_vector_difference",
+      "question": "BM25 和向量检索有什么区别？分别适合什么场景？",
+      "required_answer_terms": ["BM25 是一种经典关键词检索算法", "精确匹配", "向量检索是一种语义检索方式", "同义表达"],
+      "relevant_source_terms": ["BM25 是一种经典关键词检索算法", "BM25 擅长精确匹配", "向量检索是一种语义检索方式", "向量检索擅长处理同义表达"]
+    },
+    {
+      "id": "bm25_vector_complement",
+      "question": "BM25 和向量检索是替代关系吗？",
+      "required_answer_terms": ["不是替代关系", "互补关系", "混合检索"],
+      "relevant_source_terms": ["BM25 和向量检索通常不是替代关系", "互补关系", "推荐做法是混合检索"]
+    },
+    {
+      "id": "reranker_vector_db",
+      "question": "Reranker 和向量数据库有什么区别？",
+      "required_answer_terms": ["Reranker 不是向量数据库", "向量数据库负责快速召回候选内容", "reranker 负责对候选内容进行更精细的相关性排序"],
+      "relevant_source_terms": ["Reranker 不是向量数据库", "向量数据库负责快速召回候选内容", "reranker 负责对候选内容进行更精细的相关性排序"]
+    },
+    {
+      "id": "llamaindex_role",
+      "question": "LlamaIndex 在当前系统里做了哪些事？",
+      "required_answer_terms": ["包装成 LlamaIndex Document", "构建临时 VectorStoreIndex", "召回相关 node", "转回系统统一的 SearchHit"],
+      "relevant_source_terms": ["将系统已有的 chunk 包装成 LlamaIndex Document", "构建临时 VectorStoreIndex", "召回相关 node", "转回系统统一的 SearchHit"]
+    },
+    {
+      "id": "llamaindex_not_replace",
+      "question": "LlamaIndex 是否替代了 Milvus、权限控制和最终回答生成？",
+      "required_answer_terms": ["不是向量数据库", "没有替代", "权限控制", "最终回答生成"],
+      "relevant_source_terms": ["LlamaIndex 在星澜知识助手中不是大模型，也不是向量数据库", "LlamaIndex 没有替代文档解析", "权限控制", "最终回答生成"]
+    },
+    {
+      "id": "liming_access",
+      "question": "研发员工李明能访问哪些知识库？不能访问哪个知识库？",
+      "required_answer_terms": ["公共知识库", "研发知识库", "不能访问人事知识库"],
+      "relevant_source_terms": ["研发部门员工李明", "可以访问公共知识库和研发知识库", "不能访问人事知识库"]
+    },
+    {
+      "id": "wangmin_access",
+      "question": "HR 管理员王敏可以做哪些普通员工不能做的事？",
+      "required_answer_terms": ["创建知识库", "访问人事知识库"],
+      "relevant_source_terms": ["HR 管理员王敏", "她可以创建知识库", "也可以访问人事知识库"]
+    },
+    {
+      "id": "unauthorized_doc_id",
+      "question": "如果用户手动传入无权限 doc_id，系统应该怎么处理？",
+      "required_answer_terms": ["后端", "过滤掉"],
+      "relevant_source_terms": ["即使用户手动传入无权限 doc_id，后端也必须过滤掉"]
+    },
+    {
+      "id": "kb_visibility",
+      "question": "公共知识库、研发知识库、人事知识库的可见范围分别是什么？",
+      "required_answer_terms": ["公共知识库对所有员工可见", "研发知识库仅对研发部门和技术负责人可见", "人事知识库仅对 HR 部门和 HR 管理员可见"],
+      "relevant_source_terms": ["公共知识库对所有员工可见", "研发知识库仅对研发部门和技术负责人可见", "人事知识库仅对 HR 部门和 HR 管理员可见"]
+    },
+    {
+      "id": "least_privilege",
+      "question": "为什么企业 RAG 系统需要最小权限模型？",
+      "required_answer_terms": ["只能看到自己有权访问的知识库", "只能检索自己有权访问的文档", "过滤"],
+      "relevant_source_terms": ["系统采用最小权限模型", "用户只能看到自己有权访问的知识库", "用户只能检索自己有权访问的文档"]
+    },
+    {
+      "id": "risks",
+      "question": "当前系统有哪些主要风险？",
+      "required_answer_terms": ["文档解析风险", "检索风险", "生成风险", "权限风险", "性能风险"],
+      "relevant_source_terms": ["当前系统存在五类主要风险", "文档解析风险", "检索风险", "生成风险", "权限风险", "性能风险"]
+    },
+    {
+      "id": "acceptance_metrics",
+      "question": "第一阶段的三个关键验收指标是什么？",
+      "required_answer_terms": ["准确率不低于 85%", "引用命中率不低于 90%", "10MB 以内文档", "3 分钟内完成"],
+      "relevant_source_terms": ["常见制度问题回答准确率不低于 85%", "带引用回答的引用命中率不低于 90%", "10MB 以内文档的异步摄入任务应在 3 分钟内完成"],
+      "forbidden_answer_terms": ["80%"]
+    },
+    {
+      "id": "scanned_pdf_risk",
+      "question": "为什么扫描版 PDF 会带来解析风险？",
+      "required_answer_terms": ["扫描版 PDF", "OCR 质量不稳定"],
+      "relevant_source_terms": ["扫描版 PDF 可能 OCR 质量不稳定"]
+    },
+    {
+      "id": "vector_miss_terms",
+      "question": "为什么单纯向量检索可能漏掉精确术语？",
+      "required_answer_terms": ["单纯向量检索", "漏掉精确术语"],
+      "relevant_source_terms": ["单纯向量检索可能漏掉精确术语"]
+    },
+    {
+      "id": "citation_check",
+      "question": "系统为什么需要引用校验？",
+      "required_answer_terms": ["回答必须可追溯", "不能编造答案"],
+      "relevant_source_terms": ["系统要求回答必须可追溯", "而不是编造答案"]
+    },
+    {
+      "id": "multi_fact",
+      "question": "请同时说明：项目负责人是谁、试点总人数是多少、支持哪些文件格式、第一阶段验收指标有哪些。",
+      "required_answer_terms": ["陈舟", "30 名员工", "PDF", "DOCX", "TXT", "Markdown", "85%", "90%", "10MB", "3 分钟"],
+      "relevant_source_terms": ["项目负责人是陈舟", "第一阶段试点范围包括 30 名员工", "系统目前支持四种文件格式", "第一阶段的关键验收指标有三个"]
+    },
+    {
+      "id": "hybrid_compare",
+      "question": "请对比 BM25、向量检索和 reranker，并说明它们在 RAG 中分别负责什么。",
+      "required_answer_terms": ["BM25", "关键词检索", "向量检索", "语义检索", "reranker", "排序"],
+      "relevant_source_terms": ["BM25 是一种经典关键词检索算法", "向量检索是一种语义检索方式", "reranker 负责对候选内容进行更精细的相关性排序"]
+    },
+    {
+      "id": "llamaindex_summary",
+      "question": "请说明 LlamaIndex 当前做了什么、没有替代什么、为什么它不是大模型。",
+      "required_answer_terms": ["包装成 LlamaIndex Document", "VectorStoreIndex", "SearchHit", "没有替代", "不是大模型"],
+      "relevant_source_terms": ["LlamaIndex 在星澜知识助手中不是大模型", "将系统已有的 chunk 包装成 LlamaIndex Document", "构建临时 VectorStoreIndex", "转回系统统一的 SearchHit", "LlamaIndex 没有替代"]
+    },
+    {
+      "id": "access_compare",
+      "question": "请判断李明和王敏分别能访问哪些知识库，并说明原因。",
+      "required_answer_terms": ["李明", "公共知识库", "研发知识库", "不能访问人事知识库", "王敏", "访问人事知识库"],
+      "relevant_source_terms": ["研发部门员工李明", "HR 管理员王敏", "可以访问公共知识库和研发知识库", "也可以访问人事知识库"]
+    },
+    {
+      "id": "unsupported_answer_policy",
+      "question": "如果系统回答没有引用或引用不支持结论，应该如何处理？",
+      "required_answer_terms": ["依据不足", "不能编造"],
+      "relevant_source_terms": ["如果检索不到直接证据", "应该明确说明依据不足", "不能编造"]
+    },
+    {
+      "id": "negative_unrelated_question",
+      "question": "星澜知识助手项目的食堂菜单是什么？",
+      "expected_refusal": true,
+      "required_answer_terms": ["依据不足"],
+      "relevant_source_terms": []
+    }
+  ]
+}

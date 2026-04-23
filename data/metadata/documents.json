@@ -1,0 +1,17 @@
+[
+  {
+    "doc_id": "a22b4ae7-952c-4035-82bc-3f321d49bbe9",
+    "filename": "bm25.docx",
+    "kb_id": "kb_public"
+  },
+  {
+    "doc_id": "c075700a-6263-4e14-a148-04469d49146d",
+    "filename": "bm25.docx",
+    "kb_id": "kb_public"
+  },
+  {
+    "doc_id": "fbaa2e25-65e9-4b46-a86b-cdcd42d482dd",
+    "filename": "rag_quality_test.docx",
+    "kb_id": "kb_public"
+  }
+]

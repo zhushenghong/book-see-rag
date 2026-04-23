@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "book-see-rag"
+version = "0.1.0"
+description = "Production-grade RAG system for document analysis"
+requires-python = ">=3.11"
+dependencies = [
+    # LangChain
+    "langchain>=0.3.0",
+    "langchain-community>=0.3.0",
+    "langchain-openai>=0.2.0",
+    "langchain-anthropic>=0.2.0",
+    # FastAPI
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "python-multipart>=0.0.9",
+    # Document loading
+    "python-docx>=1.1.0",
+    "pdfplumber>=0.11.0",
+    "marker-pdf>=0.3.0",
+    # Vector store
+    "pymilvus>=2.4.0",
+    # Embedding & Reranker
+    "FlagEmbedding>=1.2.0",
+    # Redis & Celery
+    "redis>=5.0.0",
+    "celery>=5.4.0",
+    # Config
+    "pydantic-settings>=2.4.0",
+    "python-dotenv>=1.0.0",
+    # UI
+    "streamlit>=1.38.0",
+    "httpx>=0.27.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=5.0.0",
+    "httpx>=0.27.0",
+]
+llamaindex = [
+    "llama-index-core>=0.12.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "--cov=src --cov-report=term-missing --cov-fail-under=80"

@@ -1,0 +1,13 @@
+.env
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+.venv/
+data/uploads/
+data/chroma_db/
+.coverage
+htmlcov/
+.pytest_cache/
+.idea/
+.DS_Store
