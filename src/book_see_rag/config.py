@@ -50,10 +50,34 @@ class Settings(BaseSettings):
     # Storage
     upload_dir: str = "./data/uploads"
     metadata_dir: str = "./data/metadata"
+    query_profiles_path: str = "./data/query_profiles.json"
 
     # API
     api_host: str = "0.0.0.0"
     api_port: int = 8000
+
+    # Auth / Tenant
+    # For production, prefer gateway or JWT-based auth. Header-based context is kept for local/dev compatibility.
+    auth_mode: str = "headers"  # headers | jwt
+    jwt_issuer: str = ""
+    jwt_audience: str = ""
+    jwt_secret: str = ""  # HS256 (dev). For RS256, use jwt_public_key_pem.
+    jwt_public_key_pem: str = ""  # RS256
+    tenant_header: str = "x-tenant-id"
+    tenant_claim: str = "tenant_id"
+    default_tenant_id: str = "public"
+    allow_insecure_control_plane_headers: bool = False
+    enforce_tenant_status: bool = True
+    require_tenant_registered: bool = False
+
+    # Metadata store
+    metadata_backend: str = "json"  # json | sql
+    metadata_db_url: str = ""  # e.g. mysql+pymysql://user:pass@host:3306/db
+
+    # Control plane (tenant admin)
+    control_plane_data_dir: str = "./data/control_plane"
+    tenant_base_domain: str = "rag.example.com"
+    tenant_deploy_webhook_url: str = ""  # if set, control plane will POST on tenant create/disable/delete
 
     # Chunking
     chunk_size: int = 512

@@ -32,8 +32,8 @@ services:
     profiles: [infra]
     image: minio/minio:RELEASE.2024-05-01T01-11-10Z
     environment:
-      MINIO_ACCESS_KEY: minioadmin
-      MINIO_SECRET_KEY: minioadmin
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
     command: minio server /minio_data --console-address ":9001"
     volumes:
       - minio_data:/minio_data
@@ -122,6 +122,18 @@ services:
       API_BASE: http://api:8000/api
     depends_on:
       - api
+    restart: unless-stopped
+
+  control-plane:
+    profiles: [control-plane]
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.control_plane
+    ports:
+      - "8080:8080"
+    env_file: .env
+    volumes:
+      - ./data/control_plane:/app/data/control_plane
     restart: unless-stopped
 
 volumes:

@@ -34,6 +34,11 @@ dependencies = [
     # UI
     "streamlit>=1.38.0",
     "httpx>=0.27.0",
+    # Auth
+    "PyJWT>=2.8.0",
+    # Metadata DB (optional for hard-isolation deployments)
+    "SQLAlchemy>=2.0.0",
+    "PyMySQL>=1.1.0",
 ]
 
 [project.optional-dependencies]

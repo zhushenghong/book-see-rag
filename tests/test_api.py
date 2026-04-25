@@ -71,7 +71,7 @@ def test_chat_endpoint(client):
     assert r.json()["session_id"] == "s1"
     assert r.json()["scope"] == {"doc_ids": ["d1"], "kb_ids": []}
     mock_scope.assert_called_once()
-    mock_set_scope.assert_called_once_with("s1", ["d1"], [])
+    mock_set_scope.assert_called_once_with("public:s1", ["d1"], [])
 
 
 def test_chat_endpoint_uses_stored_scope_when_request_omits_filters(client):
@@ -82,7 +82,7 @@ def test_chat_endpoint_uses_stored_scope_when_request_omits_filters(client):
         r = client.post("/api/chat", json={"session_id": "s1", "message": "继续说"})
     assert r.status_code == 200
     assert r.json()["scope"] == {"doc_ids": ["d2"], "kb_ids": ["kb_rd"]}
-    mock_get_scope.assert_called_once_with("s1")
+    mock_get_scope.assert_called_once_with("public:s1")
     assert mock_scope.call_args.args[1:] == (["d2"], ["kb_rd"])
 
 
@@ -98,7 +98,7 @@ def test_clear_session(client):
     with patch("book_see_rag.api.routes.chat.delete_session") as mock_del:
         r = client.delete("/api/chat/sessions/session-001")
     assert r.status_code == 200
-    mock_del.assert_called_once_with("session-001")
+    mock_del.assert_called_once_with("public:session-001")
 
 
 def test_get_session_messages(client):
@@ -115,7 +115,7 @@ def test_get_session_messages(client):
         r = client.get("/api/chat/sessions/session-001")
     assert r.status_code == 200
     assert r.json() == messages
-    mock_list.assert_called_once_with("session-001")
+    mock_list.assert_called_once_with("public:session-001")
 
 
 def test_list_documents(client):
@@ -127,7 +127,7 @@ def test_list_documents(client):
 
 
 def test_list_knowledge_bases(client):
-    items = [{"kb_id": "kb_public", "name": "公共知识库", "visibility": "public"}]
+    items = [{"kb_id": "kb_public", "name": "公共知识库", "visibility": "public", "query_profile": "default"}]
     with patch("book_see_rag.api.routes.knowledge_bases.list_knowledge_bases_for_user", return_value=items):
         r = client.get("/api/knowledge-bases")
     assert r.status_code == 200
@@ -145,7 +145,7 @@ def test_create_knowledge_base_requires_admin(client):
 
 
 def test_create_knowledge_base_success(client):
-    item = {"kb_id": "kb_finance", "name": "财务知识库", "visibility": "department"}
+    item = {"kb_id": "kb_finance", "name": "财务知识库", "visibility": "department", "query_profile": "default"}
     with patch("book_see_rag.api.routes.knowledge_bases.create_knowledge_base", return_value=item) as mock_create:
         r = client.post(
             "/api/knowledge-bases",
@@ -153,6 +153,7 @@ def test_create_knowledge_base_success(client):
                 "kb_id": "kb_finance",
                 "name": "财务知识库",
                 "visibility": "department",
+                "query_profile": "default",
                 "departments": ["finance"],
                 "roles": ["hr_admin"],
                 "user_ids": ["alice"],
@@ -165,6 +166,8 @@ def test_create_knowledge_base_success(client):
         kb_id="kb_finance",
         name="财务知识库",
         visibility="department",
+        query_profile="default",
+        tenant_id="public",
         departments=["finance"],
         roles=["hr_admin"],
         user_ids=["alice"],

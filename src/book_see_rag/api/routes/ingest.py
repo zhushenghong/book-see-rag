@@ -4,8 +4,16 @@ from pathlib import Path
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from pydantic import BaseModel
 from celery.result import AsyncResult
+from fastapi import Depends
+from book_see_rag.access_control import UserContext, get_current_user
 from book_see_rag.config import get_settings
-from book_see_rag.metadata_store import get_knowledge_base, register_document
+from book_see_rag.metadata_store import (
+    get_ingest_task,
+    get_knowledge_base,
+    register_document,
+    register_ingest_task,
+    user_can_access_kb,
+)
 from book_see_rag.tasks.ingest_task import celery_app, ingest_document
 
 router = APIRouter(prefix="/ingest", tags=["ingest"])
@@ -29,11 +37,16 @@ ALLOWED_SUFFIXES = {".pdf", ".docx", ".txt", ".md", ".markdown"}
 
 
 @router.post("", response_model=IngestResponse)
-async def ingest(file: UploadFile = File(...), kb_id: str = Form("kb_public")):
+async def ingest(
+    file: UploadFile = File(...),
+    kb_id: str = Form("kb_public"),
+    user: UserContext = Depends(get_current_user),
+):
     suffix = Path(file.filename).suffix.lower()
     if suffix not in ALLOWED_SUFFIXES:
         raise HTTPException(400, f"不支持的文件格式：{suffix}")
-    if not get_knowledge_base(kb_id):
+    kb = get_knowledge_base(kb_id, tenant_id=user.tenant_id)
+    if not kb or not user_can_access_kb(user, kb):
         raise HTTPException(400, f"未知知识库：{kb_id}")
 
     settings = get_settings()
@@ -46,8 +59,9 @@ async def ingest(file: UploadFile = File(...), kb_id: str = Form("kb_public")):
     with dest.open("wb") as f:
         shutil.copyfileobj(file.file, f)
 
-    register_document(doc_id, file.filename, kb_id)
+    register_document(doc_id, file.filename, kb_id, tenant_id=user.tenant_id)
     task = ingest_document.delay(doc_id, str(dest), file.filename)
+    register_ingest_task(task.id, doc_id, tenant_id=user.tenant_id)
     return IngestResponse(
         task_id=task.id,
         doc_id=doc_id,
@@ -58,7 +72,9 @@ async def ingest(file: UploadFile = File(...), kb_id: str = Form("kb_public")):
 
 
 @router.get("/{task_id}", response_model=TaskStatus)
-async def get_task_status(task_id: str):
+async def get_task_status(task_id: str, user: UserContext = Depends(get_current_user)):
+    if not get_ingest_task(task_id, tenant_id=user.tenant_id):
+        raise HTTPException(404, "任务不存在")
     result = AsyncResult(task_id, app=celery_app)
     status_map = {
         "PENDING":  "pending",

@@ -25,7 +25,7 @@ async def delete_document(doc_id: str, user: UserContext = Depends(get_current_u
         if doc_id not in allowed_docs:
             raise HTTPException(403, "当前用户无权删除该文档")
         delete_by_doc_id(doc_id)
-        delete_document_metadata(doc_id)
+        delete_document_metadata(doc_id, tenant_id=user.tenant_id)
         return {"message": f"文档 {doc_id} 已删除"}
     except Exception as e:
         if isinstance(e, HTTPException):

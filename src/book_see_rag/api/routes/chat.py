@@ -8,6 +8,10 @@ from book_see_rag.metadata_store import resolve_allowed_doc_ids
 router = APIRouter(prefix="/chat", tags=["chat"])
 
 
+def _tenant_session_id(user: UserContext, session_id: str) -> str:
+    return f"{user.tenant_id}:{session_id}"
+
+
 class ChatRequest(BaseModel):
     session_id: str
     message: str
@@ -49,15 +53,16 @@ class ChatMessage(BaseModel):
 @router.post("", response_model=ChatResponse)
 async def chat_endpoint(req: ChatRequest, user: UserContext = Depends(get_current_user)):
     try:
+        scoped_session_id = _tenant_session_id(user, req.session_id)
         incoming_scope = req.doc_ids is not None or req.kb_ids is not None
         if incoming_scope:
             effective_doc_ids = resolve_allowed_doc_ids(user, req.doc_ids, req.kb_ids)
-            effective_scope = set_session_scope(req.session_id, effective_doc_ids, req.kb_ids or [])
+            effective_scope = set_session_scope(scoped_session_id, effective_doc_ids, req.kb_ids or [])
         else:
-            stored_scope = get_session_scope(req.session_id)
+            stored_scope = get_session_scope(scoped_session_id)
             effective_doc_ids = resolve_allowed_doc_ids(user, stored_scope["doc_ids"], stored_scope["kb_ids"])
             effective_scope = {"doc_ids": effective_doc_ids, "kb_ids": stored_scope["kb_ids"]}
-        result = chat(req.session_id, req.message, doc_ids=effective_doc_ids, scope=effective_scope)
+        result = chat(scoped_session_id, req.message, doc_ids=effective_doc_ids, scope=effective_scope)
         return ChatResponse(
             session_id=req.session_id,
             answer=result["answer"],
@@ -69,16 +74,16 @@ async def chat_endpoint(req: ChatRequest, user: UserContext = Depends(get_curren
 
 
 @router.get("/sessions/{session_id}", response_model=list[ChatMessage])
-async def get_session_messages(session_id: str):
-    return list_session_messages(session_id)
+async def get_session_messages(session_id: str, user: UserContext = Depends(get_current_user)):
+    return list_session_messages(_tenant_session_id(user, session_id))
 
 
 @router.get("/sessions/{session_id}/scope", response_model=SessionScope)
-async def get_scope(session_id: str):
-    return get_session_scope(session_id)
+async def get_scope(session_id: str, user: UserContext = Depends(get_current_user)):
+    return get_session_scope(_tenant_session_id(user, session_id))
 
 
 @router.delete("/sessions/{session_id}")
-async def clear_session(session_id: str):
-    delete_session(session_id)
+async def clear_session(session_id: str, user: UserContext = Depends(get_current_user)):
+    delete_session(_tenant_session_id(user, session_id))
     return {"message": f"会话 {session_id} 记忆已清除"}
