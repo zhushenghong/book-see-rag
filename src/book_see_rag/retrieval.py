@@ -23,7 +23,7 @@ def filter_meta_evaluation_chunks(hits: list[RankedHit]) -> list[RankedHit]:
     return filtered or hits
 
 
-def _extract_terms(query: str) -> list[str]:
+def extract_terms(query: str) -> list[str]:
     base_terms = [term.lower() for term in _TOKEN_RE.findall(query)]
     expanded: list[str] = []
     for term in base_terms:
@@ -44,7 +44,7 @@ def prefilter_hits(query: str, hits: list[RankedHit], limit: int) -> list[Ranked
     if not hits:
         return []
 
-    terms = _extract_terms(query)
+    terms = extract_terms(query)
     if not terms:
         return hits[:limit]
 

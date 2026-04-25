@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "default": {
+      "eval_set": "docs/rag_quality_eval_set.json"
+    },
+    "laptop": {
+      "eval_set": "docs/lianxiang_laptop_eval_set.json"
+    }
+  }
+}

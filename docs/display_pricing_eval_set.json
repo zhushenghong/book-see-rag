@@ -1,0 +1,166 @@
+{
+  "name": "display_pricing_eval_set",
+  "description": "评测联想消费显示器、配件、笔记本、台式机报价单。涵盖拯救者刃系列、GeekPro、天逸、小新、Yoga、显示器、配件等产品的配置和价格。",
+  "cases": [
+    {
+      "id": "y9000k_price",
+      "categories": ["台式机", "拯救者刃"],
+      "question": "拯救者刃9000K RTX5090D 32G 配置的价格是多少？",
+      "required_answer_terms": ["49000", "RTX5090D_32G"],
+      "relevant_source_terms": ["拯救者刃9000K", "RTX5090D_32G", "49000"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "y7000k_price",
+      "categories": ["台式机", "拯救者刃"],
+      "question": "拯救者刃7000K RTX5070Ti 16G 配置的价格是多少？",
+      "required_answer_terms": ["16500", "RTX5070Ti_16G"],
+      "relevant_source_terms": ["拯救者刃7000K", "RTX5070Ti_16G", "16500"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "geekpro_price",
+      "categories": ["台式机", "GeekPro"],
+      "question": "GeekPro i7-14700F RTX5060Ti 8G 价格是多少？",
+      "required_answer_terms": ["10500", "RTX5060Ti_8G", "i7-14700F"],
+      "relevant_source_terms": ["GeekPro", "i7-14700F", "RTX5060Ti_8G", "10500"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "yoga_price",
+      "categories": ["一体机", "Yoga"],
+      "question": "Yoga Air 32 RTX4050 6G 配置的价格是多少？",
+      "required_answer_terms": ["17300", "RTX4050_6G"],
+      "relevant_source_terms": ["Yoga Air 32", "RTX4050_6G", "17300"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "xiaoxin_allinone_price",
+      "categories": ["一体机", "小新"],
+      "question": "小新Pro27 i7-13620H 集显配置的价格是多少？",
+      "required_answer_terms": ["7900", "i7-13620H", "集显"],
+      "relevant_source_terms": ["小新Pro27", "i7-13620H", "7900"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "tianyi_price",
+      "categories": ["台式机", "天逸"],
+      "question": "天逸510S i5-14400 16G 512SSD 价格是多少？",
+      "required_answer_terms": ["天逸510S", "i5-14400", "16G", "512"],
+      "relevant_source_terms": ["天逸510S", "i5-14400", "16G", "512"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "monitor_price",
+      "categories": ["显示器"],
+      "question": "联想家用显示器23.8英寸的价格是多少？",
+      "required_answer_terms": ["360", "23.8"],
+      "relevant_source_terms": ["家用显示器L2435", "23.8", "360"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "gpu_accessory_price",
+      "categories": ["配件", "显卡"],
+      "question": "拆机RTX5080 16G显卡的价格是多少？",
+      "required_answer_terms": ["10000", "RTX5080_16G"],
+      "relevant_source_terms": ["拆机RTX5080_16G", "10000"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "y9000k_gpu_compare",
+      "categories": ["台式机", "拯救者刃"],
+      "question": "拯救者刃9000K有哪些显卡配置可选？价格分别是多少？",
+      "required_answer_terms": ["RTX5090D", "RTX5080", "RTX5070Ti", "RTX4080SP"],
+      "relevant_source_terms": ["拯救者刃9000K", "RTX5090D", "RTX5080", "RTX5070Ti", "RTX4080SP"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "y7000_gpu_compare",
+      "categories": ["台式机", "拯救者刃"],
+      "question": "拯救者刃7000K有哪些显卡配置？哪种价格最便宜？",
+      "required_answer_terms": ["RTX5070", "RTX4080SP", "RTX4070Ti"],
+      "relevant_source_terms": ["拯救者刃7000K", "RTX5070", "RTX4080SP", "RTX4070Ti"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "desktop_vs_laptop",
+      "categories": ["对比"],
+      "question": "台式机和笔记本相比，同样的显卡配置价格差多少？",
+      "required_answer_terms": ["RTX5060", "RTX5060Ti"],
+      "relevant_source_terms": ["RTX5060", "RTX5060Ti"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "aio_all_models",
+      "categories": ["一体机"],
+      "question": "联想有哪些AIO一体机产品？价格最低的是哪款？",
+      "required_answer_terms": ["天逸", "小新", "Yoga", "AIO", "Lecoo"],
+      "relevant_source_terms": ["天逸510", "小新Pro", "Yoga", "AIO", "Lecoo"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "lecoo_price",
+      "categories": ["一体机", "Lecoo"],
+      "question": "Lecoo酷310 i5-13420H 16G 512G 价格是多少？",
+      "required_answer_terms": ["3700", "i5-13420H"],
+      "relevant_source_terms": ["Lecoo酷310", "i5-13420H", "16G", "512", "3700"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "刃9000k_detailed",
+      "categories": ["台式机", "拯救者刃"],
+      "question": "拯救者刃9000K RTX5080 16G 水冷侧透850W的具体配置和价格？",
+      "required_answer_terms": ["RTX5080_16G", "850W", "水冷", "28500"],
+      "relevant_source_terms": ["拯救者刃9000K", "RTX5080_16G", "850W", "水冷", "28500"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "显示器尺寸对比",
+      "categories": ["显示器"],
+      "question": "联想有哪些尺寸的显示器可选？价格分别是多少？",
+      "required_answer_terms": ["21.5", "23.8", "24", "27"],
+      "relevant_source_terms": ["21.5", "23.8", "24", "27"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "yoga27_vs_air32",
+      "categories": ["一体机", "对比"],
+      "question": "Yoga 27和Yoga Air 32有什么区别？价格差多少？",
+      "required_answer_terms": ["Yoga 27", "Yoga Air 32", "14500"],
+      "relevant_source_terms": ["Yoga 27", "Yoga Air 32", "14500", "17300"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "最低配台式机",
+      "categories": ["台式机"],
+      "question": "联想台式机中价格最低的配置是什么？价格多少？",
+      "required_answer_terms": ["天逸510S", "i3-14100", "3500"],
+      "relevant_source_terms": ["天逸510S", "i3-14100", "3500"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "电竞台式机推荐",
+      "categories": ["台式机", "游戏"],
+      "question": "想玩3A游戏，预算2万以内，推荐哪款台式机？",
+      "required_answer_terms": ["刃7000K", "RTX5070Ti", "16500", "RTX4080SP", "17500"],
+      "relevant_source_terms": ["刃7000K", "RTX5070Ti", "RTX4080SP"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "办公一体机推荐",
+      "categories": ["一体机", "办公"],
+      "question": "办公用，想买一台联想一体机，有什么推荐？价格多少？",
+      "required_answer_terms": ["小新", "天逸", "Yoga"],
+      "relevant_source_terms": ["小新Pro27", "天逸510", "Yoga"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "显卡升级价格",
+      "categories": ["配件", "显卡"],
+      "question": "如果单独买一张RTX5070Ti 16G显卡要多少钱？",
+      "required_answer_terms": ["6800", "RTX5070Ti_16G"],
+      "relevant_source_terms": ["RTX5070Ti_16G", "6800"],
+      "forbidden_answer_terms": []
+    }
+  ]
+}

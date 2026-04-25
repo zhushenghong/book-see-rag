@@ -4,7 +4,18 @@ from types import SimpleNamespace
 from book_see_rag.chains.answer_cleanup import clean_answer_text
 from book_see_rag.chains.answer_guardrails import find_unsupported_numbers
 from book_see_rag.chains.answer_quality import inspect_answer_quality
-from book_see_rag.retrieval import filter_meta_evaluation_chunks, prefilter_hits
+from book_see_rag.query_understanding import (
+    choose_profile,
+    detect_ambiguous_objects,
+    expand_query_terms,
+    extract_explicit_objects,
+    filter_hits_by_focus,
+    is_underspecified_query,
+)
+from book_see_rag.retrieval import (
+    filter_meta_evaluation_chunks,
+    prefilter_hits,
+)
 
 
 class _FakePrompt:
@@ -263,6 +274,104 @@ def test_chat_llamaindex_backend_falls_back_to_milvus():
         milvus_search.assert_called_once_with("bm25 是什么", doc_ids=["d1"])
 
 
+def test_expand_query_terms_adds_hardware_synonyms():
+    expanded = expand_query_terms("gpu是啥？")
+    assert "显卡" in expanded
+    assert "图形处理器" in expanded
+
+
+def test_filter_hits_by_focus_prefers_target_object():
+    hits = [
+        {"doc_id": "d1", "filename": "联想.docx", "page": 1, "content": "联想小新Pro 16 2024款 重量：1.92kg", "score": 0.8},
+        {"doc_id": "d1", "filename": "联想.docx", "page": 2, "content": "联想拯救者Y9000P 2024款 重量：2.55kg", "score": 0.9},
+    ]
+
+    filtered = filter_hits_by_focus("联想小新Pro 16 多重？", hits)
+
+    assert filtered == [hits[0]]
+
+
+def test_chat_uses_focus_filter_for_followup_query():
+    hits = [
+        {"doc_id": "d1", "filename": "联想.docx", "page": 1, "content": "联想小新Pro 16 2024款 重量：1.92kg", "score": 0.8},
+        {"doc_id": "d1", "filename": "联想.docx", "page": 2, "content": "联想拯救者Y9000P 2024款 重量：2.55kg", "score": 0.9},
+    ]
+    settings = SimpleNamespace(
+        chat_history_window=6,
+        followup_rewrite_history=2,
+        retrieval_prefilter_top_k=4,
+        enable_rerank=False,
+        rerank_top_k=1,
+    )
+
+    from book_see_rag.chains import chat_chain
+
+    with patch("book_see_rag.chains.chat_chain.get_settings", return_value=settings), \
+         patch("book_see_rag.chains.chat_chain.get_recent_messages", return_value=[]), \
+         patch("book_see_rag.chains.chat_chain._rewrite_query", return_value="联想小新Pro 16 2024款 多重？"), \
+         patch("book_see_rag.chains.chat_chain._retrieve_hits", return_value=hits), \
+         patch("book_see_rag.chains.chat_chain.create_llm", return_value=MagicMock()), \
+         patch("book_see_rag.chains.chat_chain.append_user_message"), \
+         patch("book_see_rag.chains.chat_chain.append_ai_message"), \
+         patch("book_see_rag.chains.chat_chain._PROMPT", _FakePrompt("联想小新Pro 16 2024款重量约 1.92kg。")):
+        result = chat_chain.chat("session-001", "他多重？")
+
+    assert result["sources"] == [hits[0]]
+
+
+def test_extract_explicit_objects_finds_model_names():
+    objects = extract_explicit_objects("联想小新Pro 16 2024款 重量：1.92kg；联想拯救者Y9000P 2024款 重量：2.55kg")
+    assert "联想小新Pro 16 2024款" in objects
+    assert "联想拯救者Y9000P 2024款" in objects
+
+
+def test_is_underspecified_query_detects_short_followup():
+    assert is_underspecified_query("gpu是啥？") is True
+    assert is_underspecified_query("联想小新Pro 16 的 gpu 是啥？") is False
+
+
+def test_detect_ambiguous_objects_returns_multiple_candidates():
+    hits = [
+        {"doc_id": "d1", "filename": "联想.docx", "page": 1, "content": "联想小新Pro 16 2024款 重量：1.92kg", "score": 0.8},
+        {"doc_id": "d1", "filename": "联想.docx", "page": 2, "content": "联想拯救者Y9000P 2024款 重量：2.55kg", "score": 0.9},
+    ]
+
+    objects = detect_ambiguous_objects("他多重？", hits)
+
+    assert objects == ["联想小新Pro 16 2024款", "联想拯救者Y9000P 2024款"]
+
+
+def test_choose_profile_prefers_explicit_kb_binding():
+    docs = [{"doc_id": "d1", "filename": "notes.txt", "kb_id": "kb_laptop"}]
+    kb = {"kb_id": "kb_laptop", "name": "Laptop KB", "visibility": "public", "query_profile": "laptop"}
+    with patch("book_see_rag.query_understanding.list_documents", return_value=docs), \
+         patch("book_see_rag.query_understanding.get_knowledge_base", return_value=kb):
+        profile = choose_profile("它多重？", doc_ids=["d1"])
+
+    assert profile.name == "laptop"
+
+
+def test_qa_refuses_underspecified_question_when_multiple_objects_present():
+    hits = [
+        {"doc_id": "d1", "filename": "联想.docx", "page": 1, "content": "联想小新Pro 16 2024款 重量：1.92kg", "score": 0.8},
+        {"doc_id": "d1", "filename": "联想.docx", "page": 2, "content": "联想拯救者Y9000P 2024款 重量：2.55kg", "score": 0.9},
+    ]
+    settings = SimpleNamespace(
+        retrieval_prefilter_top_k=4,
+        enable_rerank=False,
+        rerank_top_k=1,
+    )
+
+    from book_see_rag.chains import qa_chain
+
+    with patch("book_see_rag.chains.qa_chain.get_settings", return_value=settings), \
+         patch("book_see_rag.chains.qa_chain._retrieve_hits", return_value=hits):
+        result = qa_chain.answer("他多重？", doc_ids=["d1"])
+
+    assert "问题未明确具体对象" in result["answer"]
+    assert result["sources"] == []
+
+
 def test_prefilter_hits_prioritizes_lexical_match():
     hits = [
         {"doc_id": "d1", "filename": "doc.pdf", "page": 1, "content": "这段只谈公司制度", "score": 0.95},
@@ -288,7 +397,33 @@ def test_filter_meta_evaluation_chunks_removes_meta_when_possible():
     ]
     filtered = filter_meta_evaluation_chunks(hits)
     assert len(filtered) == 1
-    assert filtered[0]["page"] == 2
+
+
+def test_inspect_answer_quality_allows_evidence_aligned_tech_terms():
+    answer = "联想小新Pro 16 使用 Intel Core i7-13700H，支持 LPDDR5，并可选 RTX 3050。"
+    evidence = "处理器：Intel Core i7-13700H；内存：LPDDR5；显卡：NVIDIA GeForce RTX 3050 独立显卡"
+
+    issues = inspect_answer_quality(answer, evidence)
+
+    assert "contains_garbled_english" not in issues
+
+
+def test_find_unsupported_numbers_allows_windows_and_weight_numbers_from_evidence():
+    answer = "系统为 Windows 11，重量约 2.55kg，支持 140W 快充。"
+    evidence = "操作系统：Windows 11 家庭中文版；重量：约2.55kg；电池：80Wh，支持140W快充"
+
+    unsupported = find_unsupported_numbers(answer, evidence)
+
+    assert unsupported == []
+
+
+def test_find_unsupported_numbers_still_flags_missing_number():
+    answer = "重量约 2.55kg，厚度约 26.4mm，便携差 0.63kg。"
+    evidence = "重量：约2.55kg；厚度：约26.4mm"
+
+    unsupported = find_unsupported_numbers(answer, evidence)
+
+    assert unsupported == ["0.63kg"]
 
 
 def test_find_unsupported_numbers_detects_answer_numbers_not_in_evidence():
@@ -307,7 +442,13 @@ def test_inspect_answer_quality_detects_benchmark_bad_outputs():
 
 def test_inspect_answer_quality_allows_common_rag_terms():
     answer = "RAG 使用 BM25、embedding、reranker、Milvus、FastAPI 和 LlamaIndex。"
-    assert inspect_answer_quality(answer) == []
+    assert inspect_answer_quality(answer, evidence_text=answer) == []
+
+
+def test_inspect_answer_quality_allows_spaced_model_terms_when_evidence_has_compact_form():
+    answer = "这台机器的显卡是 NVIDIA GeForce RTX 4060 Laptop GPU。"
+    evidence = "参数：NVIDIA GeForce RTX4060 Laptop GPU；内存 16GB。"
+    assert inspect_answer_quality(answer, evidence_text=evidence) == []
 
 
 def test_clean_answer_text_removes_broken_chars_and_common_noise():

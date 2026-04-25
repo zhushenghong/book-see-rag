@@ -7,6 +7,7 @@ from book_see_rag.chains.answer_guardrails import find_unsupported_numbers
 from book_see_rag.chains.answer_quality import inspect_answer_quality
 from book_see_rag.config import get_settings
 from book_see_rag.llm.factory import create_llm
+from book_see_rag.query_understanding import detect_ambiguous_objects, expand_query_terms, filter_hits_by_focus
 from book_see_rag.retrieval import filter_meta_evaluation_chunks, prefilter_hits
 from book_see_rag.vectorstore.milvus_store import get_doc_hits, search_hits
 from book_see_rag.embedding.reranker import rerank
@@ -17,11 +18,13 @@ from book_see_rag.retrievers.scoped_documents import load_hits_from_uploads
 logger = logging.getLogger("uvicorn.error")
 
 _QUALITY_FAILURE_MESSAGE = "检索到相关证据，但生成结果未通过质量校验。请重试或缩小问题范围。"
+_AMBIGUITY_MESSAGE_TEMPLATE = "问题未明确具体对象。当前文档里至少包含这些候选对象：{objects}。请明确你要问哪一个。"
 
 _PROMPT = ChatPromptTemplate.from_messages([
     ("system",
      "你是一个专业的文档分析助手。根据以下参考内容回答用户问题，"
      "若参考内容不足以回答，请如实说明。"
+     "如果问题里已经指向某个具体对象，只回答该对象，不要混答其他对象。"
      "如果用户一次问多个问题，必须逐项回答，不能遗漏子问题。"
      "涉及日期、人数、比例、文件大小、技术名词时，必须严格照抄参考内容中的原文数字和名称，不要自行换算、修正或补全。"
      "不要把“推荐测试问题”或“标准答案要点”当成事实依据，除非用户明确询问测试题或标准答案。"
@@ -33,6 +36,7 @@ _PROMPT = ChatPromptTemplate.from_messages([
 _STRICT_PROMPT = ChatPromptTemplate.from_messages([
     ("system",
      "你是一个严谨的文档事实抽取助手。只能根据参考内容回答。"
+     "如果问题里已经指向某个具体对象，只回答该对象，不要混答其他对象。"
      "答案中的日期、人数、比例、文件大小、技术名词必须从参考内容中逐字复制。"
      "如果某个数字或术语在参考内容中没有原样出现，禁止写入答案。"
      "不要添加参考内容没有的背景、解释或推断。"
@@ -46,7 +50,7 @@ _STRICT_PROMPT = ChatPromptTemplate.from_messages([
 
 def _inspect_guardrails(answer_text: str, context: str) -> tuple[list[str], list[str]]:
     unsupported_numbers = find_unsupported_numbers(answer_text, context)
-    quality_issues = inspect_answer_quality(answer_text)
+    quality_issues = inspect_answer_quality(answer_text, context)
     return unsupported_numbers, quality_issues
 
 
@@ -72,12 +76,17 @@ def answer(question: str, doc_ids: list[str] | None = None) -> dict:
     """
     started = time.perf_counter()
     settings = get_settings()
+    retrieval_query = expand_query_terms(question, doc_ids=doc_ids)
     t0 = time.perf_counter()
-    candidates = _retrieve_hits(question, doc_ids=doc_ids)
+    candidates = _retrieve_hits(retrieval_query, doc_ids=doc_ids)
     t1 = time.perf_counter()
     candidates = [item for item in candidates if not is_noisy_chunk(item["content"])]
     candidates = filter_meta_evaluation_chunks(candidates)
-    candidates = prefilter_hits(question, candidates, settings.retrieval_prefilter_top_k)
+    ambiguous_objects = detect_ambiguous_objects(question, candidates, doc_ids=doc_ids)
+    if ambiguous_objects:
+        return {"answer": _AMBIGUITY_MESSAGE_TEMPLATE.format(objects="、".join(ambiguous_objects)), "sources": []}
+    candidates = filter_hits_by_focus(retrieval_query, candidates, doc_ids=doc_ids)
+    candidates = prefilter_hits(retrieval_query, candidates, settings.retrieval_prefilter_top_k)
     if not candidates and doc_ids:
         try:
             fallback = get_doc_hits(doc_ids, limit=settings.retrieval_prefilter_top_k)
@@ -87,9 +96,13 @@ def answer(question: str, doc_ids: list[str] | None = None) -> dict:
         if not fallback:
             fallback = load_hits_from_uploads(doc_ids, limit=settings.retrieval_prefilter_top_k)
         candidates = [item for item in fallback if not is_noisy_chunk(item["content"])]
+        ambiguous_objects = detect_ambiguous_objects(question, candidates, doc_ids=doc_ids)
+        if ambiguous_objects:
+            return {"answer": _AMBIGUITY_MESSAGE_TEMPLATE.format(objects="、".join(ambiguous_objects)), "sources": []}
+        candidates = filter_hits_by_focus(retrieval_query, candidates, doc_ids=doc_ids)
     candidate_texts = [item["content"] for item in candidates]
     if settings.enable_rerank:
-        ranked_chunks = rerank(question, candidate_texts)
+        ranked_chunks = rerank(retrieval_query, candidate_texts)
     else:
         ranked_chunks = candidate_texts[:settings.rerank_top_k]
         logger.info("QA rerank disabled using top_k=%s from search results", len(ranked_chunks))

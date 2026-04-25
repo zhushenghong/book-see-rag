@@ -1,0 +1,1237 @@
+{
+  "filename": "消费 显示器 配件  报价2026年.txt",
+  "doc_id": "3a536eb5-3dfe-4183-b2e5-13794d74d360",
+  "eval_set": "/Users/zhushenghong/PycharmProjects/book-see-rag/docs/display_pricing_eval_set.json",
+  "retrieval_backend": "llamaindex",
+  "mode": "qa",
+  "api_base": "http://127.0.0.1:8000/api",
+  "k": 5,
+  "question_count": 20,
+  "summary": {
+    "case_count": 20,
+    "answer_accuracy": 0.05,
+    "avg_answer_score": 0.1658,
+    "avg_recall_at_k": 0.3775,
+    "avg_mrr": 0.6042,
+    "avg_ndcg_at_k": 0.5816,
+    "refusal_rate": 0.25,
+    "hallucination_rate": 0.0
+  },
+  "results": [
+    {
+      "index": 1,
+      "case_id": "y9000k_price",
+      "categories": [
+        "台式机",
+        "拯救者刃"
+      ],
+      "question": "拯救者刃9000K RTX5090D 32G 配置的价格是多少？",
+      "answer": "检索到相关证据，但生成结果未通过质量校验。请重试或缩小问题范围。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-30AGB 9800X3D 32G2T-5TI-11 WiFi7 RTX5070TI_16G 水冷侧透850W\n拯救者刃7000P-30AGB 9800X3D 32G2T-97XT WiFi7 RX9070XT_16G 水冷侧透850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-5TI RTX5070TI_16G 850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-XT RX9070XT_16G 850W\n拯救者刃7000P-26ADR R98945HX 32G1TGW-5 RTX5070_12G 550W\n拯救者刃700",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-26ADR R98945HX 32G1TGW-5B RTX5060_8G 550W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "﻿ 北京蓝峰 消费 笔记本 台式 一体机 含税报价\n消费笔记本\n拯救者Y9000PUltra9-275HX32G1TW11碳晶黑16寸/RTX5080_16G/2.5k240HzOLED屏(2*16DDR5M.22280)----\n消费台式机",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510Pro-17IAS U7265 32G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠 单主机---\n天逸510Pro-17IAS U5225 32G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠+23.8\n天逸510Pro-17IAS U5225 16G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠 单主机---",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "显示器\n联想系列\nYoga Air 32-ILL U7258V32G1TGW-11X/RTX4050_6G/哈曼卡顿音响/无线银色4K小天---17300含税 现货\nYoga 27-IAH10 U9285H32G1TGW11VX/RTX4050_6G无线键鼠JBL音响/灰色2K小天 ----14500含税 现货",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 11.847,
+      "evaluation": {
+        "answer_score": 0.0,
+        "answer_correct": false,
+        "answer_matched_terms": 0,
+        "answer_required_terms": 2,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "ndcg_at_k": 0.0,
+        "source_matched_terms": 0,
+        "source_required_terms": 3,
+        "refused": true,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 2,
+      "case_id": "y7000k_price",
+      "categories": [
+        "台式机",
+        "拯救者刃"
+      ],
+      "question": "拯救者刃7000K RTX5070Ti 16G 配置的价格是多少？",
+      "answer": "参考内容中没有\"拯救者刃7000K\"系列的产品，参考内容中只有\"拯救者刃7000P\"系列。\n\n且参考内容只提供了产品型号信息，**不包含任何价格信息**。\n\n因此无法回答您的问题。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-30AGB 9800X3D 32G2T-5TI-11 WiFi7 RTX5070TI_16G 水冷侧透850W\n拯救者刃7000P-30AGB 9800X3D 32G2T-97XT WiFi7 RX9070XT_16G 水冷侧透850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-5TI RTX5070TI_16G 850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-XT RX9070XT_16G 850W\n拯救者刃7000P-26ADR R98945HX 32G1TGW-5 RTX5070_12G 550W\n拯救者刃700",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-26ADR R98945HX 32G1TGW-5B RTX5060_8G 550W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "﻿ 北京蓝峰 消费 笔记本 台式 一体机 含税报价\n消费笔记本\n拯救者Y9000PUltra9-275HX32G1TW11碳晶黑16寸/RTX5080_16G/2.5k240HzOLED屏(2*16DDR5M.22280)----\n消费台式机",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新27-ARR R77735HS 16G 1TSSDWL-11V 集成 云影白 哈曼 无线键鼠\n小新27-ARR R77735HS 16G 1TSSDWC-11V 集成 深空灰 哈曼 无线键鼠-\n小新27-ARR R57535H 16G1TSSDC-11 集成 云影白 哈曼 无线键鼠\n小新27-ABR R57430U 16G 512SSDWK-11V 集成 云影白 摄像头 无线\n小新27-ABR R57430U 16G 512SSDWW-11V 集成 深空灰 摄像头 无线",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510S-08IRR i714700 2*16G2560WO-11Q/2T+512SSD 集成 260W 阳光橙色前面板\n天逸510S-08IRR i514400 2*16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板\n天逸510S-08IRR i514400 16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板----",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 9.802,
+      "evaluation": {
+        "answer_score": 0.0,
+        "answer_correct": false,
+        "answer_matched_terms": 0,
+        "answer_required_terms": 2,
+        "recall_at_k": 0.3333,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.1564,
+        "source_matched_terms": 1,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 3,
+      "case_id": "geekpro_price",
+      "categories": [
+        "台式机",
+        "GeekPro"
+      ],
+      "question": "GeekPro i7-14700F RTX5060Ti 8G 价格是多少？",
+      "answer": "检索到相关证据，但生成结果未通过质量校验。请重试或缩小问题范围。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-30AGB 9800X3D 32G2T-5TI-11 WiFi7 RTX5070TI_16G 水冷侧透850W\n拯救者刃7000P-30AGB 9800X3D 32G2T-97XT WiFi7 RX9070XT_16G 水冷侧透850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-5TI RTX5070TI_16G 850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-XT RX9070XT_16G 850W\n拯救者刃7000P-26ADR R98945HX 32G1TGW-5 RTX5070_12G 550W\n拯救者刃700",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-26ADR R98945HX 32G1TGW-5B RTX5060_8G 550W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拆卡区 （后加显卡按库里成本核算）",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新台式电脑-08IRH i713620H16G1TW-11Q集成 180W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "﻿ 北京蓝峰 消费 笔记本 台式 一体机 含税报价\n消费笔记本\n拯救者Y9000PUltra9-275HX32G1TW11碳晶黑16寸/RTX5080_16G/2.5k240HzOLED屏(2*16DDR5M.22280)----\n消费台式机",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 8.868,
+      "evaluation": {
+        "answer_score": 0.0,
+        "answer_correct": false,
+        "answer_matched_terms": 0,
+        "answer_required_terms": 3,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "ndcg_at_k": 0.0,
+        "source_matched_terms": 0,
+        "source_required_terms": 4,
+        "refused": true,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 4,
+      "case_id": "yoga_price",
+      "categories": [
+        "一体机",
+        "Yoga"
+      ],
+      "question": "Yoga Air 32 RTX4050 6G 配置的价格是多少？",
+      "answer": "Yoga Air 32 配置 RTX4050_6G 的价格是 **17300元含税**，为现货状态。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "显示器\n联想系列\nYoga Air 32-ILL U7258V32G1TGW-11X/RTX4050_6G/哈曼卡顿音响/无线银色4K小天---17300含税 现货\nYoga 27-IAH10 U9285H32G1TGW11VX/RTX4050_6G无线键鼠JBL音响/灰色2K小天 ----14500含税 现货",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-30AGB 9800X3D 32G2T-5TI-11 WiFi7 RTX5070TI_16G 水冷侧透850W\n拯救者刃7000P-30AGB 9800X3D 32G2T-97XT WiFi7 RX9070XT_16G 水冷侧透850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-5TI RTX5070TI_16G 850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-XT RX9070XT_16G 850W\n拯救者刃7000P-26ADR R98945HX 32G1TGW-5 RTX5070_12G 550W\n拯救者刃700",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "﻿ 北京蓝峰 消费 笔记本 台式 一体机 含税报价\n消费笔记本\n拯救者Y9000PUltra9-275HX32G1TW11碳晶黑16寸/RTX5080_16G/2.5k240HzOLED屏(2*16DDR5M.22280)----\n消费台式机",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "AIO520-24IAN N100 16G 512W-11Q 集成 云灰色 摄像头 无线键鼠\n来酷系列",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "AIO520-24IAN N100 16G 512W-11Q 集成 云灰色 摄像头 无线键鼠\n来酷系列",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 3.927,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": true,
+        "answer_matched_terms": 2,
+        "answer_required_terms": 2,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.3333,
+        "source_matched_terms": 3,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 5,
+      "case_id": "xiaoxin_allinone_price",
+      "categories": [
+        "一体机",
+        "小新"
+      ],
+      "question": "小新Pro27 i7-13620H 集显配置的价格是多少？",
+      "answer": "检索到相关证据，但生成结果未通过质量校验。请重试或缩小问题范围。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新27-ARR R77735HS 16G 1TSSDWL-11V 集成 云影白 哈曼 无线键鼠\n小新27-ARR R77735HS 16G 1TSSDWC-11V 集成 深空灰 哈曼 无线键鼠-\n小新27-ARR R57535H 16G1TSSDC-11 集成 云影白 哈曼 无线键鼠\n小新27-ABR R57430U 16G 512SSDWK-11V 集成 云影白 摄像头 无线\n小新27-ABR R57430U 16G 512SSDWW-11V 集成 深空灰 摄像头 无线",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新台式电脑-08IRH i713620H16G1TW-11Q集成 180W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-26ADR R98945HX 32G1TGW-5B RTX5060_8G 550W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "显示器\n联想系列\nYoga Air 32-ILL U7258V32G1TGW-11X/RTX4050_6G/哈曼卡顿音响/无线银色4K小天---17300含税 现货\nYoga 27-IAH10 U9285H32G1TGW11VX/RTX4050_6G无线键鼠JBL音响/灰色2K小天 ----14500含税 现货",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拆卡区 （后加显卡按库里成本核算）",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 11.774,
+      "evaluation": {
+        "answer_score": 0.0,
+        "answer_correct": false,
+        "answer_matched_terms": 0,
+        "answer_required_terms": 3,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "ndcg_at_k": 0.0,
+        "source_matched_terms": 0,
+        "source_required_terms": 3,
+        "refused": true,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 6,
+      "case_id": "tianyi_price",
+      "categories": [
+        "台式机",
+        "天逸"
+      ],
+      "question": "天逸510S i5-14400 16G 512SSD 价格是多少？",
+      "answer": "参考内容中只包含产品配置信息（如处理器、内存、硬盘、显卡、功率、颜色等），但没有提供价格信息。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510S-08IRR i513400 16G2560W-11Q/2T+512SSD 集成 180W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510S-08IRR i714700 2*16G2560WO-11Q/2T+512SSD 集成 260W 阳光橙色前面板\n天逸510S-08IRR i514400 2*16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板\n天逸510S-08IRR i514400 16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板----",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新27-ARR R77735HS 16G 1TSSDWL-11V 集成 云影白 哈曼 无线键鼠\n小新27-ARR R77735HS 16G 1TSSDWC-11V 集成 深空灰 哈曼 无线键鼠-\n小新27-ARR R57535H 16G1TSSDC-11 集成 云影白 哈曼 无线键鼠\n小新27-ABR R57430U 16G 512SSDWK-11V 集成 云影白 摄像头 无线\n小新27-ABR R57430U 16G 512SSDWW-11V 集成 深空灰 摄像头 无线",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510Pro-17IAS U7265 32G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠 单主机---\n天逸510Pro-17IAS U5225 32G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠+23.8\n天逸510Pro-17IAS U5225 16G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠 单主机---",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "AIO520-24IAN N100 16G 512W-11Q 集成 云灰色 摄像头 无线键鼠\n来酷系列",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 6.547,
+      "evaluation": {
+        "answer_score": 0.0,
+        "answer_correct": false,
+        "answer_matched_terms": 0,
+        "answer_required_terms": 4,
+        "recall_at_k": 0.75,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.1658,
+        "source_matched_terms": 3,
+        "source_required_terms": 4,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 7,
+      "case_id": "monitor_price",
+      "categories": [
+        "显示器"
+      ],
+      "question": "联想家用显示器23.8英寸的价格是多少？",
+      "answer": "参考内容中没有单独列出联想23.8英寸家用显示器的价格信息。\n\n仅有天逸510Pro套餐中包含23.8英寸显示器（作为套餐配件），但未标注单独售价。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "显示器\n联想系列\nYoga Air 32-ILL U7258V32G1TGW-11X/RTX4050_6G/哈曼卡顿音响/无线银色4K小天---17300含税 现货\nYoga 27-IAH10 U9285H32G1TGW11VX/RTX4050_6G无线键鼠JBL音响/灰色2K小天 ----14500含税 现货",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510Pro-17IAS U7265 32G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠 单主机---\n天逸510Pro-17IAS U5225 32G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠+23.8\n天逸510Pro-17IAS U5225 16G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠 单主机---",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "配件（均为未税）\n组装机系列（按需定制）",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拆卡区 （后加显卡按库里成本核算）",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新台式电脑-08IRH i713620H16G1TW-11Q集成 180W",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 5.766,
+      "evaluation": {
+        "answer_score": 0.5,
+        "answer_correct": false,
+        "answer_matched_terms": 1,
+        "answer_required_terms": 2,
+        "recall_at_k": 0.3333,
+        "mrr": 0.5,
+        "ndcg_at_k": 0.4693,
+        "source_matched_terms": 1,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 8,
+      "case_id": "gpu_accessory_price",
+      "categories": [
+        "配件",
+        "显卡"
+      ],
+      "question": "拆机RTX5080 16G显卡的价格是多少？",
+      "answer": "参考内容中没有提供拆机RTX5080 16G显卡的具体价格信息。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "﻿ 北京蓝峰 消费 笔记本 台式 一体机 含税报价\n消费笔记本\n拯救者Y9000PUltra9-275HX32G1TW11碳晶黑16寸/RTX5080_16G/2.5k240HzOLED屏(2*16DDR5M.22280)----\n消费台式机",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-30AGB 9800X3D 32G2T-5TI-11 WiFi7 RTX5070TI_16G 水冷侧透850W\n拯救者刃7000P-30AGB 9800X3D 32G2T-97XT WiFi7 RX9070XT_16G 水冷侧透850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-5TI RTX5070TI_16G 850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-XT RX9070XT_16G 850W\n拯救者刃7000P-26ADR R98945HX 32G1TGW-5 RTX5070_12G 550W\n拯救者刃700",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拆卡区 （后加显卡按库里成本核算）",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510S-08IRR i513400 16G2560W-11Q/2T+512SSD 集成 180W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510S-08IRR i714700 2*16G2560WO-11Q/2T+512SSD 集成 260W 阳光橙色前面板\n天逸510S-08IRR i514400 2*16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板\n天逸510S-08IRR i514400 16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板----",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 5.206,
+      "evaluation": {
+        "answer_score": 0.0,
+        "answer_correct": false,
+        "answer_matched_terms": 0,
+        "answer_required_terms": 2,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "ndcg_at_k": 0.0,
+        "source_matched_terms": 0,
+        "source_required_terms": 2,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 9,
+      "case_id": "y9000k_gpu_compare",
+      "categories": [
+        "台式机",
+        "拯救者刃"
+      ],
+      "question": "拯救者刃9000K有哪些显卡配置可选？价格分别是多少？",
+      "answer": "参考内容中没有关于“拯救者刃9000K”的信息。参考内容仅包含拯救者刃7000P系列台式机以及拯救者Y9000P笔记本的相关配置。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-30AGB 9800X3D 32G2T-5TI-11 WiFi7 RTX5070TI_16G 水冷侧透850W\n拯救者刃7000P-30AGB 9800X3D 32G2T-97XT WiFi7 RX9070XT_16G 水冷侧透850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-5TI RTX5070TI_16G 850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-XT RX9070XT_16G 850W\n拯救者刃7000P-26ADR R98945HX 32G1TGW-5 RTX5070_12G 550W\n拯救者刃700",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-26ADR R98945HX 32G1TGW-5B RTX5060_8G 550W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "﻿ 北京蓝峰 消费 笔记本 台式 一体机 含税报价\n消费笔记本\n拯救者Y9000PUltra9-275HX32G1TW11碳晶黑16寸/RTX5080_16G/2.5k240HzOLED屏(2*16DDR5M.22280)----\n消费台式机",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拆卡区 （后加显卡按库里成本核算）",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510S-08IRR i714700 2*16G2560WO-11Q/2T+512SSD 集成 260W 阳光橙色前面板\n天逸510S-08IRR i514400 2*16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板\n天逸510S-08IRR i514400 16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板----",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 8.437,
+      "evaluation": {
+        "answer_score": 0.0,
+        "answer_correct": false,
+        "answer_matched_terms": 0,
+        "answer_required_terms": 4,
+        "recall_at_k": 0.4,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.3071,
+        "source_matched_terms": 2,
+        "source_required_terms": 5,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 10,
+      "case_id": "y7000_gpu_compare",
+      "categories": [
+        "台式机",
+        "拯救者刃"
+      ],
+      "question": "拯救者刃7000K有哪些显卡配置？哪种价格最便宜？",
+      "answer": "参考内容中没有“拯救者刃7000K”的相关信息。参考内容中列出的是“拯救者刃7000P”系列，包含以下显卡配置：\n\n**刃7000P-30AGB：**\n\n- RTX 5070 Ti 16G\n- RX 9070 XT 16G\n\n**刃7000P-26ADR：**\n\n- RTX 5070 Ti 16G\n- RX 9070 XT 16G\n- RTX 5070 12G\n- RTX 5060 Ti 16G\n- RTX 5060 8G\n\n如果您想了解的是拯救者刃7000K，请提供更多参考内容后我再为您查询。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-30AGB 9800X3D 32G2T-5TI-11 WiFi7 RTX5070TI_16G 水冷侧透850W\n拯救者刃7000P-30AGB 9800X3D 32G2T-97XT WiFi7 RX9070XT_16G 水冷侧透850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-5TI RTX5070TI_16G 850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-XT RX9070XT_16G 850W\n拯救者刃7000P-26ADR R98945HX 32G1TGW-5 RTX5070_12G 550W\n拯救者刃700",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-26ADR R98945HX 32G1TGW-5B RTX5060_8G 550W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "﻿ 北京蓝峰 消费 笔记本 台式 一体机 含税报价\n消费笔记本\n拯救者Y9000PUltra9-275HX32G1TW11碳晶黑16寸/RTX5080_16G/2.5k240HzOLED屏(2*16DDR5M.22280)----\n消费台式机",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拆卡区 （后加显卡按库里成本核算）",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新27-ARR R77735HS 16G 1TSSDWL-11V 集成 云影白 哈曼 无线键鼠\n小新27-ARR R77735HS 16G 1TSSDWC-11V 集成 深空灰 哈曼 无线键鼠-\n小新27-ARR R57535H 16G1TSSDC-11 集成 云影白 哈曼 无线键鼠\n小新27-ABR R57430U 16G 512SSDWK-11V 集成 云影白 摄像头 无线\n小新27-ABR R57430U 16G 512SSDWW-11V 集成 深空灰 摄像头 无线",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 7.884,
+      "evaluation": {
+        "answer_score": 0.0,
+        "answer_correct": false,
+        "answer_matched_terms": 0,
+        "answer_required_terms": 3,
+        "recall_at_k": 0.25,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.0778,
+        "source_matched_terms": 1,
+        "source_required_terms": 4,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 11,
+      "case_id": "desktop_vs_laptop",
+      "categories": [
+        "对比"
+      ],
+      "question": "台式机和笔记本相比，同样的显卡配置价格差多少？",
+      "answer": "参考内容中没有提供台式机和笔记本使用同样显卡配置的具体价格数据，无法进行对比。\n\n参考内容中虽然提到了一些产品（如拯救者Y9000P配备RTX5080_16G），但没有标注价格；台式机部分仅有集成显卡的配置，未提供独立显卡台式机的具体报价。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "﻿ 北京蓝峰 消费 笔记本 台式 一体机 含税报价\n消费笔记本\n拯救者Y9000PUltra9-275HX32G1TW11碳晶黑16寸/RTX5080_16G/2.5k240HzOLED屏(2*16DDR5M.22280)----\n消费台式机",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拆卡区 （后加显卡按库里成本核算）",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新台式电脑-08IRH i713620H16G1TW-11Q集成 180W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "显示器\n联想系列\nYoga Air 32-ILL U7258V32G1TGW-11X/RTX4050_6G/哈曼卡顿音响/无线银色4K小天---17300含税 现货\nYoga 27-IAH10 U9285H32G1TGW11VX/RTX4050_6G无线键鼠JBL音响/灰色2K小天 ----14500含税 现货",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "配件（均为未税）\n组装机系列（按需定制）",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 13.92,
+      "evaluation": {
+        "answer_score": 0.0,
+        "answer_correct": false,
+        "answer_matched_terms": 0,
+        "answer_required_terms": 2,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "ndcg_at_k": 0.0,
+        "source_matched_terms": 0,
+        "source_required_terms": 2,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 12,
+      "case_id": "aio_all_models",
+      "categories": [
+        "一体机"
+      ],
+      "question": "联想有哪些AIO一体机产品？价格最低的是哪款？",
+      "answer": "## 联想AIO一体机产品\n\n根据参考内容，联想的AIO一体机产品如下：\n\n**来酷系列：**\n- AIO520-24IAN N100 16G 512W-11Q（集成显卡、云灰色、含摄像头、无线键鼠）\n\n（注：参考内容中此款产品出现两次，信息相同）\n\n---\n\n## 价格最低的产品\n\n参考内容中未提供AIO520-24IAN的具体价格信息，因此无法确定哪款价格最低。如需了解价格，请提供完整的报价单。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "﻿ 北京蓝峰 消费 笔记本 台式 一体机 含税报价\n消费笔记本\n拯救者Y9000PUltra9-275HX32G1TW11碳晶黑16寸/RTX5080_16G/2.5k240HzOLED屏(2*16DDR5M.22280)----\n消费台式机",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "AIO520-24IAN N100 16G 512W-11Q 集成 云灰色 摄像头 无线键鼠\n来酷系列",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "AIO520-24IAN N100 16G 512W-11Q 集成 云灰色 摄像头 无线键鼠\n来酷系列",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "显示器\n联想系列\nYoga Air 32-ILL U7258V32G1TGW-11X/RTX4050_6G/哈曼卡顿音响/无线银色4K小天---17300含税 现货\nYoga 27-IAH10 U9285H32G1TGW11VX/RTX4050_6G无线键鼠JBL音响/灰色2K小天 ----14500含税 现货",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新27-ARR R77735HS 16G 1TSSDWL-11V 集成 云影白 哈曼 无线键鼠\n小新27-ARR R77735HS 16G 1TSSDWC-11V 集成 深空灰 哈曼 无线键鼠-\n小新27-ARR R57535H 16G1TSSDC-11 集成 云影白 哈曼 无线键鼠\n小新27-ABR R57430U 16G 512SSDWK-11V 集成 云影白 摄像头 无线\n小新27-ABR R57430U 16G 512SSDWW-11V 集成 深空灰 摄像头 无线",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 8.335,
+      "evaluation": {
+        "answer_score": 0.2,
+        "answer_correct": false,
+        "answer_matched_terms": 1,
+        "answer_required_terms": 5,
+        "recall_at_k": 0.4,
+        "mrr": 0.5,
+        "ndcg_at_k": 0.6799,
+        "source_matched_terms": 2,
+        "source_required_terms": 5,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 13,
+      "case_id": "lecoo_price",
+      "categories": [
+        "一体机",
+        "Lecoo"
+      ],
+      "question": "Lecoo酷310 i5-13420H 16G 512G 价格是多少？",
+      "answer": "检索到相关证据，但生成结果未通过质量校验。请重试或缩小问题范围。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "AIO520-24IAN N100 16G 512W-11Q 集成 云灰色 摄像头 无线键鼠\n来酷系列",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "AIO520-24IAN N100 16G 512W-11Q 集成 云灰色 摄像头 无线键鼠\n来酷系列",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-30AGB 9800X3D 32G2T-5TI-11 WiFi7 RTX5070TI_16G 水冷侧透850W\n拯救者刃7000P-30AGB 9800X3D 32G2T-97XT WiFi7 RX9070XT_16G 水冷侧透850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-5TI RTX5070TI_16G 850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-XT RX9070XT_16G 850W\n拯救者刃7000P-26ADR R98945HX 32G1TGW-5 RTX5070_12G 550W\n拯救者刃700",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新台式电脑-08IRH i713620H16G1TW-11Q集成 180W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510S-08IRR i513400 16G2560W-11Q/2T+512SSD 集成 180W",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 8.308,
+      "evaluation": {
+        "answer_score": 0.0,
+        "answer_correct": false,
+        "answer_matched_terms": 0,
+        "answer_required_terms": 2,
+        "recall_at_k": 0.4,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.0656,
+        "source_matched_terms": 2,
+        "source_required_terms": 5,
+        "refused": true,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 14,
+      "case_id": "刃9000k_detailed",
+      "categories": [
+        "台式机",
+        "拯救者刃"
+      ],
+      "question": "拯救者刃9000K RTX5080 16G 水冷侧透850W的具体配置和价格？",
+      "answer": "参考内容中未找到“拯救者刃9000K RTX5080 16G 水冷侧透850W”的相关配置和价格信息。\n\n参考内容中仅包含拯救者刃7000P系列、刃9000K相关配置及其他消费笔记本/台式机的信息，但不包含您询问的这款具体型号。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-30AGB 9800X3D 32G2T-5TI-11 WiFi7 RTX5070TI_16G 水冷侧透850W\n拯救者刃7000P-30AGB 9800X3D 32G2T-97XT WiFi7 RX9070XT_16G 水冷侧透850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-5TI RTX5070TI_16G 850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-XT RX9070XT_16G 850W\n拯救者刃7000P-26ADR R98945HX 32G1TGW-5 RTX5070_12G 550W\n拯救者刃700",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "﻿ 北京蓝峰 消费 笔记本 台式 一体机 含税报价\n消费笔记本\n拯救者Y9000PUltra9-275HX32G1TW11碳晶黑16寸/RTX5080_16G/2.5k240HzOLED屏(2*16DDR5M.22280)----\n消费台式机",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-26ADR R98945HX 32G1TGW-5B RTX5060_8G 550W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510S-08IRR i714700 2*16G2560WO-11Q/2T+512SSD 集成 260W 阳光橙色前面板\n天逸510S-08IRR i514400 2*16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板\n天逸510S-08IRR i514400 16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板----",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510S-08IRR i513400 16G2560W-11Q/2T+512SSD 集成 180W",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 9.371,
+      "evaluation": {
+        "answer_score": 0.5,
+        "answer_correct": false,
+        "answer_matched_terms": 2,
+        "answer_required_terms": 4,
+        "recall_at_k": 0.6,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.1663,
+        "source_matched_terms": 3,
+        "source_required_terms": 5,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 15,
+      "case_id": "显示器尺寸对比",
+      "categories": [
+        "显示器"
+      ],
+      "question": "联想有哪些尺寸的显示器可选？价格分别是多少？",
+      "answer": "根据参考内容，联想显示器有以下两个尺寸可选：\n\n| 尺寸 | 型号 | 价格 |\n|------|------|------|\n| 27寸 | Yoga 27-IAH10（灰色2K，哈曼卡顿音响/RTX4050_6G，无线键鼠JBL音响） | 14500含税 |\n| 32寸 | Yoga Air 32-ILL（银色4K，哈曼卡顿音响/RTX4050_6G） | 17300含税 |\n\n以上两款均为现货。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "显示器\n联想系列\nYoga Air 32-ILL U7258V32G1TGW-11X/RTX4050_6G/哈曼卡顿音响/无线银色4K小天---17300含税 现货\nYoga 27-IAH10 U9285H32G1TGW11VX/RTX4050_6G无线键鼠JBL音响/灰色2K小天 ----14500含税 现货",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "配件（均为未税）\n组装机系列（按需定制）",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新台式电脑-08IRH i713620H16G1TW-11Q集成 180W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-30AGB 9800X3D 32G2T-5TI-11 WiFi7 RTX5070TI_16G 水冷侧透850W\n拯救者刃7000P-30AGB 9800X3D 32G2T-97XT WiFi7 RX9070XT_16G 水冷侧透850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-5TI RTX5070TI_16G 850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-XT RX9070XT_16G 850W\n拯救者刃7000P-26ADR R98945HX 32G1TGW-5 RTX5070_12G 550W\n拯救者刃700",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510S-08IRR i714700 2*16G2560WO-11Q/2T+512SSD 集成 260W 阳光橙色前面板\n天逸510S-08IRR i514400 2*16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板\n天逸510S-08IRR i514400 16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板----",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 6.545,
+      "evaluation": {
+        "answer_score": 0.25,
+        "answer_correct": false,
+        "answer_matched_terms": 1,
+        "answer_required_terms": 4,
+        "recall_at_k": 0.25,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.0778,
+        "source_matched_terms": 1,
+        "source_required_terms": 4,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 16,
+      "case_id": "yoga27_vs_air32",
+      "categories": [
+        "一体机",
+        "对比"
+      ],
+      "question": "Yoga 27和Yoga Air 32有什么区别？价格差多少？",
+      "answer": "检索到相关证据，但生成结果未通过质量校验。请重试或缩小问题范围。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "显示器\n联想系列\nYoga Air 32-ILL U7258V32G1TGW-11X/RTX4050_6G/哈曼卡顿音响/无线银色4K小天---17300含税 现货\nYoga 27-IAH10 U9285H32G1TGW11VX/RTX4050_6G无线键鼠JBL音响/灰色2K小天 ----14500含税 现货",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "﻿ 北京蓝峰 消费 笔记本 台式 一体机 含税报价\n消费笔记本\n拯救者Y9000PUltra9-275HX32G1TW11碳晶黑16寸/RTX5080_16G/2.5k240HzOLED屏(2*16DDR5M.22280)----\n消费台式机",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新27-ARR R77735HS 16G 1TSSDWL-11V 集成 云影白 哈曼 无线键鼠\n小新27-ARR R77735HS 16G 1TSSDWC-11V 集成 深空灰 哈曼 无线键鼠-\n小新27-ARR R57535H 16G1TSSDC-11 集成 云影白 哈曼 无线键鼠\n小新27-ABR R57430U 16G 512SSDWK-11V 集成 云影白 摄像头 无线\n小新27-ABR R57430U 16G 512SSDWW-11V 集成 深空灰 摄像头 无线",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510Pro-17IAS U7265 32G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠 单主机---\n天逸510Pro-17IAS U5225 32G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠+23.8\n天逸510Pro-17IAS U5225 16G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠 单主机---",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-30AGB 9800X3D 32G2T-5TI-11 WiFi7 RTX5070TI_16G 水冷侧透850W\n拯救者刃7000P-30AGB 9800X3D 32G2T-97XT WiFi7 RX9070XT_16G 水冷侧透850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-5TI RTX5070TI_16G 850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-XT RX9070XT_16G 850W\n拯救者刃7000P-26ADR R98945HX 32G1TGW-5 RTX5070_12G 550W\n拯救者刃700",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 14.632,
+      "evaluation": {
+        "answer_score": 0.0,
+        "answer_correct": false,
+        "answer_matched_terms": 0,
+        "answer_required_terms": 3,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.1993,
+        "source_matched_terms": 4,
+        "source_required_terms": 4,
+        "refused": true,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 17,
+      "case_id": "最低配台式机",
+      "categories": [
+        "台式机"
+      ],
+      "question": "联想台式机中价格最低的配置是什么？价格多少？",
+      "answer": "在参考内容中，联想台式机有价格标注的型号如下：\n\n- Yoga Air 32（Yoga Air 32-ILL U7258V32G1TGW-11X/RTX4050_6G）：17300含税\n- Yoga 27（Yoga 27-IAH10 U9285H32G1TGW11VX/RTX4050_6G）：14500含税\n\n**价格最低的配置是 Yoga 27-IAH10**，配置为：U9285H/32G/1TW/RTX4050_6G/无线键鼠/JBL音响/灰色/2K屏，价格为 **14500含税**。\n\n（参考内容中其他联想台式机如小新台式电脑和天逸510S系列均未标注价格）",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "﻿ 北京蓝峰 消费 笔记本 台式 一体机 含税报价\n消费笔记本\n拯救者Y9000PUltra9-275HX32G1TW11碳晶黑16寸/RTX5080_16G/2.5k240HzOLED屏(2*16DDR5M.22280)----\n消费台式机",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "显示器\n联想系列\nYoga Air 32-ILL U7258V32G1TGW-11X/RTX4050_6G/哈曼卡顿音响/无线银色4K小天---17300含税 现货\nYoga 27-IAH10 U9285H32G1TGW11VX/RTX4050_6G无线键鼠JBL音响/灰色2K小天 ----14500含税 现货",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新台式电脑-08IRH i713620H16G1TW-11Q集成 180W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510S-08IRR i714700 2*16G2560WO-11Q/2T+512SSD 集成 260W 阳光橙色前面板\n天逸510S-08IRR i514400 2*16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板\n天逸510S-08IRR i514400 16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板----",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "配件（均为未税）\n组装机系列（按需定制）",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 8.639,
+      "evaluation": {
+        "answer_score": 0.3333,
+        "answer_correct": false,
+        "answer_matched_terms": 1,
+        "answer_required_terms": 3,
+        "recall_at_k": 0.3333,
+        "mrr": 0.25,
+        "ndcg_at_k": 2.3464,
+        "source_matched_terms": 1,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 18,
+      "case_id": "电竞台式机推荐",
+      "categories": [
+        "台式机",
+        "游戏"
+      ],
+      "question": "想玩3A游戏，预算2万以内，推荐哪款台式机？",
+      "answer": "根据参考内容中提供的台式机产品，2万预算内推荐以下适合玩3A游戏的配置：\n\n**拯救者刃7000P-26ADR R98945HX 32G1TGW-5TI RTX5070TI_16G 850W**\n\n推荐理由：RTX5070TI_16G独立显卡具备较强的3A游戏性能，R9 8945HX处理器配合32G内存，850W电源供电充足，刃7000P系列是联想游戏台式机产品线。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "﻿ 北京蓝峰 消费 笔记本 台式 一体机 含税报价\n消费笔记本\n拯救者Y9000PUltra9-275HX32G1TW11碳晶黑16寸/RTX5080_16G/2.5k240HzOLED屏(2*16DDR5M.22280)----\n消费台式机",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新台式电脑-08IRH i713620H16G1TW-11Q集成 180W",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-30AGB 9800X3D 32G2T-5TI-11 WiFi7 RTX5070TI_16G 水冷侧透850W\n拯救者刃7000P-30AGB 9800X3D 32G2T-97XT WiFi7 RX9070XT_16G 水冷侧透850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-5TI RTX5070TI_16G 850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-XT RX9070XT_16G 850W\n拯救者刃7000P-26ADR R98945HX 32G1TGW-5 RTX5070_12G 550W\n拯救者刃700",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510S-08IRR i714700 2*16G2560WO-11Q/2T+512SSD 集成 260W 阳光橙色前面板\n天逸510S-08IRR i514400 2*16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板\n天逸510S-08IRR i514400 16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板----",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510S-08IRR i513400 16G2560W-11Q/2T+512SSD 集成 180W",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 29.358,
+      "evaluation": {
+        "answer_score": 0.2,
+        "answer_correct": false,
+        "answer_matched_terms": 1,
+        "answer_required_terms": 5,
+        "recall_at_k": 0.3333,
+        "mrr": 0.3333,
+        "ndcg_at_k": 1.095,
+        "source_matched_terms": 1,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 19,
+      "case_id": "办公一体机推荐",
+      "categories": [
+        "一体机",
+        "办公"
+      ],
+      "question": "办公用，想买一台联想一体机，有什么推荐？价格多少？",
+      "answer": "联想一体机推荐如下：\n\n**Yoga 系列**\n\n1. **Yoga Air 32** - RTX4050_6G / 哈曼卡顿音响 / 银色 / 4K屏\n - 报价：**17300元（含税）** 现货\n\n2. **Yoga 27** - RTX4050_6G / JBL音响 / 灰色 / 2K屏 / 无线键鼠\n - 报价：**14500元（含税）** 现货\n\n**来酷系列**\n\n3. **AIO520-24IAN** - N100处理器 / 16G内存 / 512G硬盘 / 集成显卡 / 云灰色 / 摄像头 / 无线键鼠\n - 报价：**未标注价格**\n\n---\n\n以上是参考内容中提供的联想一体机型号及价格，供您参考选择。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "﻿ 北京蓝峰 消费 笔记本 台式 一体机 含税报价\n消费笔记本\n拯救者Y9000PUltra9-275HX32G1TW11碳晶黑16寸/RTX5080_16G/2.5k240HzOLED屏(2*16DDR5M.22280)----\n消费台式机",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "显示器\n联想系列\nYoga Air 32-ILL U7258V32G1TGW-11X/RTX4050_6G/哈曼卡顿音响/无线银色4K小天---17300含税 现货\nYoga 27-IAH10 U9285H32G1TGW11VX/RTX4050_6G无线键鼠JBL音响/灰色2K小天 ----14500含税 现货",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "AIO520-24IAN N100 16G 512W-11Q 集成 云灰色 摄像头 无线键鼠\n来酷系列",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "AIO520-24IAN N100 16G 512W-11Q 集成 云灰色 摄像头 无线键鼠\n来酷系列",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510Pro-17IAS U7265 32G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠 单主机---\n天逸510Pro-17IAS U5225 32G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠+23.8\n天逸510Pro-17IAS U5225 16G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠 单主机---",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 8.222,
+      "evaluation": {
+        "answer_score": 0.3333,
+        "answer_correct": false,
+        "answer_matched_terms": 1,
+        "answer_required_terms": 3,
+        "recall_at_k": 0.6667,
+        "mrr": 0.5,
+        "ndcg_at_k": 5.1453,
+        "source_matched_terms": 2,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    },
+    {
+      "index": 20,
+      "case_id": "显卡升级价格",
+      "categories": [
+        "配件",
+        "显卡"
+      ],
+      "question": "如果单独买一张RTX5070Ti 16G显卡要多少钱？",
+      "answer": "参考内容中没有提供RTX5070Ti 16G显卡单独销售的价格信息。参考内容中只包含整机配置的价格，以及提到\"拆卡区（后加显卡按库里成本核算）\"，但未列出具体显卡的单价。",
+      "source_count": 5,
+      "sources": [
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拯救者刃7000P-30AGB 9800X3D 32G2T-5TI-11 WiFi7 RTX5070TI_16G 水冷侧透850W\n拯救者刃7000P-30AGB 9800X3D 32G2T-97XT WiFi7 RX9070XT_16G 水冷侧透850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-5TI RTX5070TI_16G 850W\n拯救者刃7000P-26ADR R99955HX3D32G1TGW-XT RX9070XT_16G 850W\n拯救者刃7000P-26ADR R98945HX 32G1TGW-5 RTX5070_12G 550W\n拯救者刃700",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "小新27-ARR R77735HS 16G 1TSSDWL-11V 集成 云影白 哈曼 无线键鼠\n小新27-ARR R77735HS 16G 1TSSDWC-11V 集成 深空灰 哈曼 无线键鼠-\n小新27-ARR R57535H 16G1TSSDC-11 集成 云影白 哈曼 无线键鼠\n小新27-ABR R57430U 16G 512SSDWK-11V 集成 云影白 摄像头 无线\n小新27-ABR R57430U 16G 512SSDWW-11V 集成 深空灰 摄像头 无线",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "拆卡区 （后加显卡按库里成本核算）",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510S-08IRR i714700 2*16G2560WO-11Q/2T+512SSD 集成 260W 阳光橙色前面板\n天逸510S-08IRR i514400 2*16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板\n天逸510S-08IRR i514400 16G2560WO-11Q/2T+512SSD 集成 180W 阳光橙色前面板----",
+          "score": 0.0
+        },
+        {
+          "filename": "",
+          "page": 0,
+          "content": "天逸510Pro-17IAS U7265 32G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠 单主机---\n天逸510Pro-17IAS U5225 32G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠+23.8\n天逸510Pro-17IAS U5225 16G 1T4.0SSDW-11Q集成 260W 有线灰色键鼠 单主机---",
+          "score": 0.0
+        }
+      ],
+      "elapsed_seconds": 11.966,
+      "evaluation": {
+        "answer_score": 0.0,
+        "answer_correct": false,
+        "answer_matched_terms": 0,
+        "answer_required_terms": 2,
+        "recall_at_k": 0.5,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.3457,
+        "source_matched_terms": 1,
+        "source_required_terms": 2,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": false,
+        "unsupported_numbers": [],
+        "quality_issues": [],
+        "forbidden_matched_terms": []
+      }
+    }
+  ]
+}

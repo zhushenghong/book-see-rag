@@ -1,0 +1,215 @@
+{
+  "name": "lianxiang_laptop_eval_set",
+  "description": "评测集用于测试联想电脑基本参数对比.docx文档的RAG问答质量。包含联想小新Pro 16和联想拯救者Y9000P的配置参数、屏幕、处理器等信息。",
+  "cases": [
+    {
+      "id": "xiaoxin_cpu",
+      "question": "联想小新Pro 16 2024款使用的是什么处理器？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["Intel Core i7-13700H", "AMD Ryzen 7 7840HS"],
+      "relevant_source_terms": ["联想小新Pro 16", "处理器", "Intel Core i7-13700H", "AMD Ryzen 7 7840HS"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "xiaoxin_memory",
+      "question": "联想小新Pro 16 2024款的内存配置是多少？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["16GB", "32GB", "LPDDR5"],
+      "relevant_source_terms": ["联想小新Pro 16", "内存", "16GB", "32GB", "LPDDR5"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "xiaoxin_storage",
+      "question": "联想小新Pro 16 2024款的存储容量是多少？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["512GB", "1TB", "PCIe 4.0 SSD"],
+      "relevant_source_terms": ["联想小新Pro 16", "存储", "512GB", "1TB", "PCIe 4.0 SSD"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "xiaoxin_screen",
+      "question": "联想小新Pro 16 2024款的屏幕尺寸和刷新率是多少？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["16英寸", "120Hz", "2.5K"],
+      "relevant_source_terms": ["联想小新Pro 16", "屏幕", "16英寸", "120Hz", "2.5K"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "xiaoxin_gpu",
+      "question": "联想小新Pro 16 2024款使用的是什么显卡？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["NVIDIA GeForce RTX 3050", "集成显卡"],
+      "relevant_source_terms": ["联想小新Pro 16", "显卡", "RTX 3050"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "xiaoxin_battery",
+      "question": "联想小新Pro 16 2024款的电池容量是多少？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["75Wh", "100W PD快充"],
+      "relevant_source_terms": ["联想小新Pro 16", "电池", "75Wh"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "xiaoxin_weight",
+      "question": "联想小新Pro 16 2024款的重量是多少？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["1.92kg"],
+      "relevant_source_terms": ["联想小新Pro 16", "重量", "1.92kg"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "xiaoxin_os",
+      "question": "联想小新Pro 16 2024款使用什么操作系统？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["Windows 11"],
+      "relevant_source_terms": ["联想小新Pro 16", "操作系统", "Windows 11"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "y9000p_cpu",
+      "question": "联想拯救者Y9000P 2024款使用的是什么处理器？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["Intel Core i9-13900HX", "Intel Core i7-13700HX"],
+      "relevant_source_terms": ["联想拯救者Y9000P", "处理器", "Intel Core i9-13900HX", "i7-13700HX"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "y9000p_memory",
+      "question": "联想拯救者Y9000P 2024款的内存配置是多少？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["16GB", "32GB", "DDR5"],
+      "relevant_source_terms": ["联想拯救者Y9000P", "内存", "16GB", "32GB", "DDR5"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "y9000p_storage",
+      "question": "联想拯救者Y9000P 2024款的存储容量是多少？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["1TB", "PCIe 4.0 SSD"],
+      "relevant_source_terms": ["联想拯救者Y9000P", "存储", "1TB", "PCIe 4.0 SSD"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "y9000p_screen",
+      "question": "联想拯救者Y9000P 2024款的屏幕尺寸和刷新率是多少？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["16英寸", "240Hz", "2.5K"],
+      "relevant_source_terms": ["联想拯救者Y9000P", "屏幕", "16英寸", "240Hz", "2.5K"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "y9000p_gpu",
+      "question": "联想拯救者Y9000P 2024款使用的是什么显卡？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["NVIDIA GeForce RTX 4060", "NVIDIA GeForce RTX 4070"],
+      "relevant_source_terms": ["联想拯救者Y9000P", "显卡", "RTX 4060", "RTX 4070"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "y9000p_battery",
+      "question": "联想拯救者Y9000P 2024款的电池容量是多少？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["80Wh", "140W快充"],
+      "relevant_source_terms": ["联想拯救者Y9000P", "电池", "80Wh", "140W"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "y9000p_weight",
+      "question": "联想拯救者Y9000P 2024款的重量是多少？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["2.55kg"],
+      "relevant_source_terms": ["联想拯救者Y9000P", "重量", "2.55kg"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "y9000p_os",
+      "question": "联想拯救者Y9000P 2024款使用什么操作系统？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["Windows 11"],
+      "relevant_source_terms": ["联想拯救者Y9000P", "操作系统", "Windows 11"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "compare_both_cpu",
+      "question": "联想小新Pro 16和联想拯救者Y9000P的处理器有什么不同？",
+      "categories": ["对比问答"],
+      "required_answer_terms": ["小新Pro 16", "拯救者Y9000P", "处理器"],
+      "relevant_source_terms": ["联想小新Pro 16", "联想拯救者Y9000P", "处理器"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "compare_both_gpu",
+      "question": "联想小新Pro 16和联想拯救者Y9000P的显卡有什么区别？",
+      "categories": ["对比问答"],
+      "required_answer_terms": ["RTX 3050", "RTX 4060", "RTX 4070"],
+      "relevant_source_terms": ["联想小新Pro 16", "联想拯救者Y9000P", "显卡"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "compare_both_weight",
+      "question": "哪款电脑更轻便？",
+      "categories": ["对比问答", "结论判断"],
+      "required_answer_terms": ["1.92kg", "2.55kg"],
+      "relevant_source_terms": ["联想小新Pro 16", "联想拯救者Y9000P", "重量"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "compare_both_refresh",
+      "question": "哪款电脑的屏幕刷新率更高？",
+      "categories": ["对比问答", "结论判断"],
+      "required_answer_terms": ["120Hz", "240Hz"],
+      "relevant_source_terms": ["联想小新Pro 16", "联想拯救者Y9000P", "刷新率"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "gaming_laptop",
+      "question": "哪款电脑更适合游戏？",
+      "categories": ["对比问答", "结论判断"],
+      "required_answer_terms": ["拯救者Y9000P", "电竞", "RTX 4060", "RTX 4070"],
+      "relevant_source_terms": ["联想拯救者Y9000P", "电竞", "游戏"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "portable_laptop",
+      "question": "哪款电脑更适合办公便携？",
+      "categories": ["对比问答", "结论判断"],
+      "required_answer_terms": ["小新Pro 16", "轻便", "1.92kg"],
+      "relevant_source_terms": ["联想小新Pro 16", "轻", "便携"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "y9000p_cooling",
+      "question": "联想拯救者Y9000P 2024款采用什么散热系统？",
+      "categories": ["参数抽取"],
+      "required_answer_terms": ["双风扇四热管散热系统"],
+      "relevant_source_terms": ["联想拯救者Y9000P", "散热", "双风扇四热管"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "xiaoxin_features",
+      "question": "联想小新Pro 16 2024款有哪些主要特点？",
+      "categories": ["多事实", "参数抽取"],
+      "required_answer_terms": ["金属机身", "大尺寸触控板", "背光键盘", "杜比全景声"],
+      "relevant_source_terms": ["联想小新Pro 16", "主要特点", "金属机身", "触控板"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "y9000p_features",
+      "question": "联想拯救者Y9000P 2024款有哪些主要特点？",
+      "categories": ["多事实", "参数抽取"],
+      "required_answer_terms": ["电竞级性能", "RGB键盘", "Nahimic音效", "Wi-Fi 6E"],
+      "relevant_source_terms": ["联想拯救者Y9000P", "主要特点", "电竞", "RGB键盘", "Nahimic"],
+      "forbidden_answer_terms": []
+    },
+    {
+      "id": "price_not_in_doc",
+      "question": "联想小新Pro 16 2024款的价格是多少？",
+      "categories": ["拒答"],
+      "expected_refusal": true,
+      "required_answer_terms": ["依据不足", "没有价格"],
+      "relevant_source_terms": [],
+      "forbidden_answer_terms": []
+    }
+  ]
+}

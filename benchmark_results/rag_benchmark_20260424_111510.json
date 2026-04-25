@@ -1,0 +1,1207 @@
+{
+  "filename": "联想电脑基本参数对比.docx",
+  "doc_id": "c1ba9481-bcab-4d2a-9099-6a42ba264c53",
+  "query_profile": "laptop",
+  "eval_set": "docs/lianxiang_laptop_eval_set.json",
+  "retrieval_backend": "llamaindex",
+  "mode": "chat",
+  "api_base": "",
+  "k": 5,
+  "question_count": 26,
+  "summary": {
+    "case_count": 26,
+    "answer_accuracy": 0.0,
+    "avg_answer_score": 0.8878,
+    "avg_recall_at_k": 0.7769,
+    "avg_mrr": 0.9359,
+    "avg_ndcg_at_k": 1.1186,
+    "refusal_rate": 0.0,
+    "hallucination_rate": 1.0
+  },
+  "category_summary": {
+    "参数抽取": {
+      "case_count": 19,
+      "answer_accuracy": 0.0,
+      "avg_answer_score": 0.9167,
+      "avg_recall_at_k": 0.7825,
+      "avg_mrr": 1.0,
+      "avg_ndcg_at_k": 1.2117,
+      "refusal_rate": 0.0,
+      "hallucination_rate": 1.0
+    },
+    "多事实": {
+      "case_count": 2,
+      "answer_accuracy": 0.0,
+      "avg_answer_score": 0.875,
+      "avg_recall_at_k": 0.225,
+      "avg_mrr": 1.0,
+      "avg_ndcg_at_k": 0.3648,
+      "refusal_rate": 0.0,
+      "hallucination_rate": 1.0
+    },
+    "对比问答": {
+      "case_count": 6,
+      "answer_accuracy": 0.0,
+      "avg_answer_score": 0.9444,
+      "avg_recall_at_k": 0.8889,
+      "avg_mrr": 0.8889,
+      "avg_ndcg_at_k": 1.0102,
+      "refusal_rate": 0.0,
+      "hallucination_rate": 1.0
+    },
+    "拒答": {
+      "case_count": 1,
+      "answer_accuracy": 0.0,
+      "avg_answer_score": 0.0,
+      "avg_recall_at_k": 0.0,
+      "avg_mrr": 0.0,
+      "avg_ndcg_at_k": 0.0,
+      "refusal_rate": 0.0,
+      "hallucination_rate": 1.0
+    },
+    "结论判断": {
+      "case_count": 4,
+      "answer_accuracy": 0.0,
+      "avg_answer_score": 0.9167,
+      "avg_recall_at_k": 0.8333,
+      "avg_mrr": 0.8333,
+      "avg_ndcg_at_k": 0.898,
+      "refusal_rate": 0.0,
+      "hallucination_rate": 1.0
+    }
+  },
+  "results": [
+    {
+      "index": 1,
+      "case_id": "xiaoxin_cpu",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想小新Pro 16 2024款使用的是什么处理器？",
+      "answer": "根据参考内容，联想小新Pro 16 2024款使用的处理器为：\n\n- **Intel Core i7-13700H**\n- 或 **AMD Ryzen 7 7840HS**\n\n用户提供两种处理器配置可选。",
+      "source_count": 1,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5927638134987001
+        }
+      ],
+      "elapsed_seconds": 9.327,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 2,
+        "answer_required_terms": 2,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.5615,
+        "source_matched_terms": 4,
+        "source_required_terms": 4,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 2,
+      "case_id": "xiaoxin_memory",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想小新Pro 16 2024款的内存配置是多少？",
+      "answer": "联想小新Pro 16 2024款的内存配置为：\n\n- **容量**：16GB 或 32GB\n- **类型**：LPDDR5\n- **特性**：板载，不可升级\n\n（来源：联想电脑基本参数对比.docx）",
+      "source_count": 1,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5936023523780689
+        }
+      ],
+      "elapsed_seconds": 4.653,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 3,
+        "answer_required_terms": 3,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.6958,
+        "source_matched_terms": 5,
+        "source_required_terms": 5,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 3,
+      "case_id": "xiaoxin_storage",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想小新Pro 16 2024款的存储容量是多少？",
+      "answer": "根据参考内容，联想小新Pro 16 2024款的存储容量为：**512GB/1TB PCIe 4.0 SSD（支持扩展）**",
+      "source_count": 1,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5761662714062644
+        }
+      ],
+      "elapsed_seconds": 4.224,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 3,
+        "answer_required_terms": 3,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.6958,
+        "source_matched_terms": 5,
+        "source_required_terms": 5,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 4,
+      "case_id": "xiaoxin_screen",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想小新Pro 16 2024款的屏幕尺寸和刷新率是多少？",
+      "answer": "根据参考内容，联想小新Pro 16 2024款的屏幕尺寸为**16英寸**，刷新率为**120Hz**。",
+      "source_count": 1,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5781880906119053
+        }
+      ],
+      "elapsed_seconds": 4.382,
+      "evaluation": {
+        "answer_score": 0.6667,
+        "answer_correct": false,
+        "answer_matched_terms": 2,
+        "answer_required_terms": 3,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.6958,
+        "source_matched_terms": 5,
+        "source_required_terms": 5,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 5,
+      "case_id": "xiaoxin_gpu",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想小新Pro 16 2024款使用的是什么显卡？",
+      "answer": "根据参考内容，联想小新Pro 16 2024款提供两种显卡配置：\n\n1. **集成显卡**\n2. **NVIDIA GeForce RTX 3050 独立显卡**\n\n用户可以根据需求选择不同配置。",
+      "source_count": 1,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.6493923360654663
+        }
+      ],
+      "elapsed_seconds": 7.488,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 2,
+        "answer_required_terms": 2,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.4078,
+        "source_matched_terms": 3,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 6,
+      "case_id": "xiaoxin_battery",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想小新Pro 16 2024款的电池容量是多少？",
+      "answer": "根据参考内容，联想小新Pro 16 2024款的电池容量是 **75Wh**，支持100W PD快充。",
+      "source_count": 1,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5519130912180586
+        }
+      ],
+      "elapsed_seconds": 5.027,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 2,
+        "answer_required_terms": 2,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.4078,
+        "source_matched_terms": 3,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 7,
+      "case_id": "xiaoxin_weight",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想小新Pro 16 2024款的重量是多少？",
+      "answer": "根据参考内容，联想小新Pro 16 2024款的重量为**约1.92kg**。",
+      "source_count": 1,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.6430990872256367
+        }
+      ],
+      "elapsed_seconds": 5.613,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 1,
+        "answer_required_terms": 1,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.4078,
+        "source_matched_terms": 3,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 8,
+      "case_id": "xiaoxin_os",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想小新Pro 16 2024款使用什么操作系统？",
+      "answer": "根据参考内容，联想小新Pro 16 2024款使用 **Windows 11 家庭版** 操作系统。",
+      "source_count": 1,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5816170377605888
+        }
+      ],
+      "elapsed_seconds": 5.229,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 1,
+        "answer_required_terms": 1,
+        "recall_at_k": 0.3333,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.4693,
+        "source_matched_terms": 1,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [
+          "11"
+        ],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 9,
+      "case_id": "y9000p_cpu",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想拯救者Y9000P 2024款使用的是什么处理器？",
+      "answer": "根据参考内容，联想拯救者Y9000P 2024款使用的处理器是：\n\n**Intel Core i9-13900HX 或 i7-13700HX**",
+      "source_count": 2,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.6864049135843862
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5695057151269669
+        }
+      ],
+      "elapsed_seconds": 4.211,
+      "evaluation": {
+        "answer_score": 0.5,
+        "answer_correct": false,
+        "answer_matched_terms": 1,
+        "answer_required_terms": 2,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.5615,
+        "source_matched_terms": 4,
+        "source_required_terms": 4,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 10,
+      "case_id": "y9000p_memory",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想拯救者Y9000P 2024款的内存配置是多少？",
+      "answer": "根据参考内容，联想拯救者Y9000P 2024款的内存配置为：**16GB/32GB DDR5（双插槽，可升级）**",
+      "source_count": 2,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.6630943150705276
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5585061286898032
+        }
+      ],
+      "elapsed_seconds": 3.737,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 3,
+        "answer_required_terms": 3,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.6958,
+        "source_matched_terms": 5,
+        "source_required_terms": 5,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 11,
+      "case_id": "y9000p_storage",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想拯救者Y9000P 2024款的存储容量是多少？",
+      "answer": "根据参考内容，联想拯救者Y9000P 2024款的存储容量为 **1TB PCIe 4.0 SSD**，配备双M.2插槽，支持扩展。",
+      "source_count": 2,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.6540955289600722
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5512318343607034
+        }
+      ],
+      "elapsed_seconds": 4.63,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 2,
+        "answer_required_terms": 2,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.5615,
+        "source_matched_terms": 4,
+        "source_required_terms": 4,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 12,
+      "case_id": "y9000p_screen",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想拯救者Y9000P 2024款的屏幕尺寸和刷新率是多少？",
+      "answer": "根据参考内容，联想拯救者Y9000P 2024款的屏幕尺寸为**16英寸**，刷新率为**240Hz**。\n\n> 引用：屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度",
+      "source_count": 2,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.6800342885780826
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5605516714600922
+        }
+      ],
+      "elapsed_seconds": 5.264,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 3,
+        "answer_required_terms": 3,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.6958,
+        "source_matched_terms": 5,
+        "source_required_terms": 5,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 13,
+      "case_id": "y9000p_gpu",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想拯救者Y9000P 2024款使用的是什么显卡？",
+      "answer": "根据参考内容，联想拯救者Y9000P 2024款使用的显卡是**NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU**。",
+      "source_count": 2,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.7115124847659038
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5983582943042642
+        }
+      ],
+      "elapsed_seconds": 4.964,
+      "evaluation": {
+        "answer_score": 0.5,
+        "answer_correct": false,
+        "answer_matched_terms": 1,
+        "answer_required_terms": 2,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.5615,
+        "source_matched_terms": 4,
+        "source_required_terms": 4,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 14,
+      "case_id": "y9000p_battery",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想拯救者Y9000P 2024款的电池容量是多少？",
+      "answer": "根据参考内容，联想拯救者Y9000P 2024款的电池容量是 **80Wh**，支持140W快充。",
+      "source_count": 2,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.6353612053129648
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5231145516613286
+        }
+      ],
+      "elapsed_seconds": 4.127,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 2,
+        "answer_required_terms": 2,
+        "recall_at_k": 0.75,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.1711,
+        "source_matched_terms": 3,
+        "source_required_terms": 4,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [
+          "140W"
+        ],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 15,
+      "case_id": "y9000p_weight",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想拯救者Y9000P 2024款的重量是多少？",
+      "answer": "根据参考内容，联想拯救者Y9000P 2024款的重量为**约2.55kg**。",
+      "source_count": 2,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.7156975088915258
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.6011635971168594
+        }
+      ],
+      "elapsed_seconds": 4.729,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 1,
+        "answer_required_terms": 1,
+        "recall_at_k": 0.6667,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.7654,
+        "source_matched_terms": 2,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [
+          "2.55kg"
+        ],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 16,
+      "case_id": "y9000p_os",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想拯救者Y9000P 2024款使用什么操作系统？",
+      "answer": "联想拯救者Y9000P 2024款使用 **Windows 11 家庭中文版** 操作系统。\n\n（参考依据：证据1和证据2均明确标注“操作系统：Windows 11 家庭中文版”）",
+      "source_count": 2,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.694647934177615
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5675125103852571
+        }
+      ],
+      "elapsed_seconds": 3.872,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 1,
+        "answer_required_terms": 1,
+        "recall_at_k": 0.3333,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.4693,
+        "source_matched_terms": 1,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [
+          "11"
+        ],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 17,
+      "case_id": "compare_both_cpu",
+      "categories": [
+        "对比问答"
+      ],
+      "question": "联想小新Pro 16和联想拯救者Y9000P的处理器有什么不同？",
+      "answer": "根据参考内容，两者的处理器区别如下：\n\n**联想小新Pro 16 2024款：**\n- Intel Core i7-13700H\n- AMD Ryzen 7 7840HS\n\n**联想拯救者Y9000P 2024款：**\n- Intel Core i9-13900HX\n- Intel Core i7-13700HX\n\n主要区别在于：\n\n1. **性能定位不同**：拯救者Y9000P可选更高端的i9-13900HX处理器，而小新Pro 16最高为i7-13700H\n\n2. **后缀类型不同**：小新Pro 16的i7-13700H为\"H\"后缀（标压移动处理器），拯救者Y9000P可选的i7-13700HX为\"HX\"后缀（可超频版，移动端顶级性能）\n\n3. **可选平台**：小新Pro 16还提供AMD Ryzen 7 7840HS处理器版本，拯救者Y9000P则只有Intel平台",
+      "source_count": 2,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.613989894325984
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.6366250392775599
+        }
+      ],
+      "elapsed_seconds": 7.399,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 3,
+        "answer_required_terms": 3,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.2346,
+        "source_matched_terms": 3,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 18,
+      "case_id": "compare_both_gpu",
+      "categories": [
+        "对比问答"
+      ],
+      "question": "联想小新Pro 16和联想拯救者Y9000P的显卡有什么区别？",
+      "answer": "根据参考内容，两款电脑的显卡区别如下：\n\n**联想小新Pro 16**：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n\n**联想拯救者Y9000P**：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n\n可以看出，拯救者Y9000P的显卡规格明显更高，采用RTX 4060/4070，而小新Pro 16最高仅配备RTX 3050。",
+      "source_count": 2,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.6593552088907149
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.6711519653797916
+        }
+      ],
+      "elapsed_seconds": 6.093,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 3,
+        "answer_required_terms": 3,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.2346,
+        "source_matched_terms": 3,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 19,
+      "case_id": "compare_both_weight",
+      "categories": [
+        "对比问答",
+        "结论判断"
+      ],
+      "question": "哪款电脑更轻便？",
+      "answer": "**联想小新Pro 16 2024款** 更轻便。\n\n- 联想小新Pro 16 2024款：约1.92kg\n- 联想拯救者Y9000P 2024款：约2.55kg",
+      "source_count": 3,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.533036702573994
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5015813109608888
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "操作系统：Windows 11 家庭中文版\n主要特点\n电竞级性能，适合游戏和专业创作\n霹雳RGB键盘，1.5mm键程，全键无冲\n双风扇四热管散热系统\nNahimic音效认证，高保真音频\n支持Wi-Fi 6E和蓝牙5.2\n1080p摄像头，支持人脸识别\n对比总结\n注：具体配置可能因不同销售版本而有所差异，以上参数为2024年主流配置参考。\n(AI生成)",
+          "score": 0.5196329115446291
+        }
+      ],
+      "elapsed_seconds": 8.146,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 2,
+        "answer_required_terms": 2,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.0614,
+        "source_matched_terms": 3,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [
+          "2.55kg"
+        ],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 20,
+      "case_id": "compare_both_refresh",
+      "categories": [
+        "对比问答",
+        "结论判断"
+      ],
+      "question": "哪款电脑的屏幕刷新率更高？",
+      "answer": "根据参考内容，**联想拯救者Y9000P 2024款**的屏幕刷新率更高。\n\n- 联想小新Pro 16 2024款：120Hz 刷新率\n- 联想拯救者Y9000P 2024款：240Hz 刷新率\n\n拯救者Y9000P的刷新率是小新Pro 16的2倍，更适合电竞游戏场景。",
+      "source_count": 3,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.48397545324231106
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.4598958072352603
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "操作系统：Windows 11 家庭中文版\n主要特点\n电竞级性能，适合游戏和专业创作\n霹雳RGB键盘，1.5mm键程，全键无冲\n双风扇四热管散热系统\nNahimic音效认证，高保真音频\n支持Wi-Fi 6E和蓝牙5.2\n1080p摄像头，支持人脸识别\n对比总结\n注：具体配置可能因不同销售版本而有所差异，以上参数为2024年主流配置参考。\n(AI生成)",
+          "score": 0.47066509521788513
+        }
+      ],
+      "elapsed_seconds": 4.174,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 2,
+        "answer_required_terms": 2,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.2346,
+        "source_matched_terms": 3,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 21,
+      "case_id": "gaming_laptop",
+      "categories": [
+        "对比问答",
+        "结论判断"
+      ],
+      "question": "哪款电脑更适合游戏？",
+      "answer": "联想拯救者Y9000P 2024款更适合游戏。\n\n其主要特点包括：电竞级性能，适合游戏和专业创作；配备NVIDIA GeForce RTX 4060或RTX 4070笔记本电脑GPU；16英寸2.5K屏幕，240Hz刷新率；霹雳RGB键盘，1.5mm键程，全键无冲；双风扇四热管散热系统。",
+      "source_count": 3,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.5212583502846491
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "操作系统：Windows 11 家庭中文版\n主要特点\n电竞级性能，适合游戏和专业创作\n霹雳RGB键盘，1.5mm键程，全键无冲\n双风扇四热管散热系统\nNahimic音效认证，高保真音频\n支持Wi-Fi 6E和蓝牙5.2\n1080p摄像头，支持人脸识别\n对比总结\n注：具体配置可能因不同销售版本而有所差异，以上参数为2024年主流配置参考。\n(AI生成)",
+          "score": 0.523857279989906
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.4850256799492587
+        }
+      ],
+      "elapsed_seconds": 17.42,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 4,
+        "answer_required_terms": 4,
+        "recall_at_k": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.0614,
+        "source_matched_terms": 3,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 22,
+      "case_id": "portable_laptop",
+      "categories": [
+        "对比问答",
+        "结论判断"
+      ],
+      "question": "哪款电脑更适合办公便携？",
+      "answer": "联想小新Pro 16 2024款更适合办公便携。\n\n主要便携性参数对比：\n\n- **联想小新Pro 16**：重量约1.92kg，厚度约17.5mm\n- **联想拯救者Y9000P**：重量约2.55kg，厚度约26.4mm\n\n小新Pro 16机身更轻更薄，且支持100W PD快充，便于外出携带，适合日常办公场景。",
+      "source_count": 3,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.5643786195698183
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "操作系统：Windows 11 家庭中文版\n主要特点\n电竞级性能，适合游戏和专业创作\n霹雳RGB键盘，1.5mm键程，全键无冲\n双风扇四热管散热系统\nNahimic音效认证，高保真音频\n支持Wi-Fi 6E和蓝牙5.2\n1080p摄像头，支持人脸识别\n对比总结\n注：具体配置可能因不同销售版本而有所差异，以上参数为2024年主流配置参考。\n(AI生成)",
+          "score": 0.5646015370316027
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5320151315834218
+        }
+      ],
+      "elapsed_seconds": 12.856,
+      "evaluation": {
+        "answer_score": 0.6667,
+        "answer_correct": false,
+        "answer_matched_terms": 2,
+        "answer_required_terms": 3,
+        "recall_at_k": 0.3333,
+        "mrr": 0.3333,
+        "ndcg_at_k": 0.2346,
+        "source_matched_terms": 1,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [
+          "2.55kg",
+          "26.4mm"
+        ],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 23,
+      "case_id": "y9000p_cooling",
+      "categories": [
+        "参数抽取"
+      ],
+      "question": "联想拯救者Y9000P 2024款采用什么散热系统？",
+      "answer": "根据参考内容，联想拯救者Y9000P 2024款采用**双风扇四热管散热系统**。",
+      "source_count": 2,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.6410884774106798
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5085130796752982
+        }
+      ],
+      "elapsed_seconds": 3.16,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 1,
+        "answer_required_terms": 1,
+        "recall_at_k": 0.3333,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.4693,
+        "source_matched_terms": 1,
+        "source_required_terms": 3,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 24,
+      "case_id": "xiaoxin_features",
+      "categories": [
+        "多事实",
+        "参数抽取"
+      ],
+      "question": "联想小新Pro 16 2024款有哪些主要特点？",
+      "answer": "根据参考内容，联想小新Pro 16 2024款的主要特点包括：\n\n1. **金属机身，简约设计**\n2. **大尺寸触控板，支持多指手势**\n3. **背光键盘，1.3mm键程**\n4. **双扬声器，支持杜比全景声**\n5. **1080p摄像头，支持物理防窥开关**",
+      "source_count": 1,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.6282483086271023
+        }
+      ],
+      "elapsed_seconds": 5.514,
+      "evaluation": {
+        "answer_score": 1.0,
+        "answer_correct": false,
+        "answer_matched_terms": 4,
+        "answer_required_terms": 4,
+        "recall_at_k": 0.25,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.3904,
+        "source_matched_terms": 1,
+        "source_required_terms": 4,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [
+          "1.3mm",
+          "1080"
+        ],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 25,
+      "case_id": "y9000p_features",
+      "categories": [
+        "多事实",
+        "参数抽取"
+      ],
+      "question": "联想拯救者Y9000P 2024款有哪些主要特点？",
+      "answer": "根据参考内容，联想拯救者Y9000P 2024款的主要特点包括：\n\n1. **电竞级性能，适合游戏和专业创作**\n\n2. **霹雳RGB键盘，1.5mm键程，全键无冲**\n\n3. **双风扇四热管散热系统**\n\n4. **Nahimic音效认证，高保真音频**",
+      "source_count": 2,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "大尺寸触控板，支持多指手势\n背光键盘，1.3mm键程\n双扬声器，支持杜比全景声\n1080p摄像头，支持物理防窥开关\n2. 联想拯救者Y9000P 2024款\n基本参数\n处理器：Intel Core i9-13900HX 或 i7-13700HX\n内存：16GB/32GB DDR5（双插槽，可升级）\n存储：1TB PCIe 4.0 SSD（双M.2插槽，支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 240Hz 刷新率，100% DCI-P3 色域，500nit 亮度\n显卡：NVIDIA GeForce RTX 4060 或 RTX 4070 笔记本电脑GPU\n电池：80Wh，支持",
+          "score": 0.7269813225719202
+        },
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.5922412799166238
+        }
+      ],
+      "elapsed_seconds": 8.285,
+      "evaluation": {
+        "answer_score": 0.75,
+        "answer_correct": false,
+        "answer_matched_terms": 3,
+        "answer_required_terms": 4,
+        "recall_at_k": 0.2,
+        "mrr": 1.0,
+        "ndcg_at_k": 0.3392,
+        "source_matched_terms": 1,
+        "source_required_terms": 5,
+        "refused": false,
+        "expected_refusal": false,
+        "hallucinated": true,
+        "unsupported_numbers": [
+          "1.5mm"
+        ],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    },
+    {
+      "index": 26,
+      "case_id": "price_not_in_doc",
+      "categories": [
+        "拒答"
+      ],
+      "question": "联想小新Pro 16 2024款的价格是多少？",
+      "answer": "依据参考内容中的文档，联想小新Pro 16 2024款的参数信息中**没有列出价格**。",
+      "source_count": 1,
+      "sources": [
+        {
+          "filename": "联想电脑基本参数对比.docx",
+          "page": 0,
+          "content": "联想电脑基本参数对比\n1. 联想小新Pro 16 2024款\n基本参数\n处理器：Intel Core i7-13700H 或 AMD Ryzen 7 7840HS\n内存：16GB/32GB LPDDR5（板载，不可升级）\n存储：512GB/1TB PCIe 4.0 SSD（支持扩展）\n屏幕：16英寸 2.5K (2560×1600) 120Hz 刷新率，100% sRGB 色域\n显卡：集成显卡 或 NVIDIA GeForce RTX 3050 独立显卡\n电池：75Wh，支持100W PD快充\n重量：约1.92kg\n厚度：约17.5mm\n接口：2×USB-C（支持充电/数据传输/视频输出），2",
+          "score": 0.6019119723942855
+        }
+      ],
+      "elapsed_seconds": 6.155,
+      "evaluation": {
+        "answer_score": 0.0,
+        "answer_correct": false,
+        "answer_matched_terms": 0,
+        "answer_required_terms": 2,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "ndcg_at_k": 0.0,
+        "source_matched_terms": 0,
+        "source_required_terms": 0,
+        "refused": false,
+        "expected_refusal": true,
+        "hallucinated": true,
+        "unsupported_numbers": [],
+        "quality_issues": [
+          "contains_garbled_english"
+        ],
+        "forbidden_matched_terms": 0
+      }
+    }
+  ]
+}

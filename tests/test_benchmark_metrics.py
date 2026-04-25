@@ -9,7 +9,21 @@ _MODULE = importlib.util.module_from_spec(_SPEC)
 _SPEC.loader.exec_module(_MODULE)
 
 evaluate_row = _MODULE.evaluate_row
+infer_case_categories = _MODULE.infer_case_categories
 summarize_metrics = _MODULE.summarize_metrics
+summarize_by_category = _MODULE.summarize_by_category
+
+
+def test_profile_default_eval_set_resolution(monkeypatch):
+    monkeypatch.setattr(_MODULE, "resolve_doc_profile", lambda _filename: "laptop")
+    monkeypatch.setattr(_MODULE, "resolve_eval_set_for_profile", lambda _profile: "docs/lianxiang_laptop_eval_set.json")
+
+    profile_name = "laptop"
+    resolved_eval_set = "docs/rag_quality_eval_set.json"
+    if profile_name:
+        resolved_eval_set = _MODULE.resolve_eval_set_for_profile(profile_name) or resolved_eval_set
+
+    assert resolved_eval_set == "docs/lianxiang_laptop_eval_set.json"
 
 
 def test_evaluate_row_scores_answer_and_retrieval_metrics():
@@ -83,3 +97,28 @@ def test_summarize_metrics_aggregates_rates():
     assert summary["avg_recall_at_k"] == 0.5
     assert summary["refusal_rate"] == 0.5
     assert summary["hallucination_rate"] == 0.5
+
+
+def test_infer_case_categories_prefers_explicit_categories():
+    case = {"question": "示例", "categories": ["短追问", "多对象消歧"]}
+    assert infer_case_categories(case) == ["短追问", "多对象消歧"]
+
+
+def test_infer_case_categories_uses_question_heuristics():
+    case = {"question": "请对比 BM25 和向量检索有什么区别？"}
+    categories = infer_case_categories(case)
+    assert "对比问答" in categories
+    assert "解释说明" in categories
+
+
+def test_summarize_by_category_groups_rows():
+    rows = [
+        {"categories": ["参数抽取"], "evaluation": {"answer_correct": True, "answer_score": 1.0, "recall_at_k": 1.0, "mrr": 1.0, "ndcg_at_k": 1.0, "refused": False, "hallucinated": False}},
+        {"categories": ["参数抽取", "多事实"], "evaluation": {"answer_correct": False, "answer_score": 0.5, "recall_at_k": 0.0, "mrr": 0.0, "ndcg_at_k": 0.0, "refused": False, "hallucinated": True}},
+    ]
+
+    summary = summarize_by_category(rows)
+
+    assert summary["参数抽取"]["case_count"] == 2
+    assert summary["参数抽取"]["answer_accuracy"] == 0.5
+    assert summary["多事实"]["case_count"] == 1

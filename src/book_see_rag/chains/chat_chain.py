@@ -15,6 +15,7 @@ from book_see_rag.memory.redis_memory import (
     append_user_message,
     get_recent_messages,
 )
+from book_see_rag.query_understanding import expand_query_terms, filter_hits_by_focus
 from book_see_rag.vectorstore.milvus_store import SearchHit, get_doc_hits, search_hits
 from book_see_rag.retrieval import filter_meta_evaluation_chunks, prefilter_hits
 from book_see_rag.retrievers.llamaindex_retriever import LlamaIndexUnavailable, search_hits_with_llamaindex
@@ -30,6 +31,7 @@ _PROMPT = ChatPromptTemplate.from_messages([
      "你只能依据参考内容和对话历史回答。"
      "如果参考内容不足、引用中没有直接证据、或内容疑似 OCR/解析噪声，请明确说明“依据不足”，不要猜测、不要补充未出现的技能、经历、项目或结论。"
      "回答要尽量引用能直接支撑结论的证据，不要把弱相关片段扩展成确定结论。"
+     "如果当前问题或对话历史已经指向某个具体对象，只回答该对象，不要混答其他对象。"
      "如果用户一次问多个问题，必须逐项回答，不能遗漏子问题。"
      "涉及日期、人数、比例、文件大小、技术名词时，必须严格照抄参考内容中的原文数字和名称，不要自行换算、修正或补全。"
      "不要把“推荐测试问题”或“标准答案要点”当成事实依据，除非用户明确询问测试题或标准答案。"
@@ -54,6 +56,7 @@ _REWRITE_PROMPT = ChatPromptTemplate.from_messages([
 _STRICT_PROMPT = ChatPromptTemplate.from_messages([
     ("system",
      "你是一个严谨的文档事实抽取助手。只能根据参考内容和对话历史回答。"
+     "如果当前问题或对话历史已经指向某个具体对象，只回答该对象，不要混答其他对象。"
      "答案中的日期、人数、比例、文件大小、技术名词必须从参考内容中逐字复制。"
      "如果某个数字或术语在参考内容中没有原样出现，禁止写入答案。"
      "不要添加参考内容没有的背景、解释或推断。"
@@ -68,12 +71,12 @@ _STRICT_PROMPT = ChatPromptTemplate.from_messages([
 
 def _inspect_guardrails(answer: str, context: str) -> tuple[list[str], list[str]]:
     unsupported_numbers = find_unsupported_numbers(answer, context)
-    quality_issues = inspect_answer_quality(answer)
+    quality_issues = inspect_answer_quality(answer, context)
     return unsupported_numbers, quality_issues
 
 
 def _augment_query(question: str) -> str:
-    normalized = question.strip()
+    normalized = expand_query_terms(question.strip())
     expansions: list[str] = []
     if any(term in normalized for term in ["技能", "擅长", "会什么", "能力", "技术栈"]):
         expansions.append("技能 技术栈 擅长 熟悉 掌握 能力")
@@ -176,9 +179,11 @@ def chat(
     t1 = time.perf_counter()
     candidates = _filter_hits(candidates)
     candidates = filter_meta_evaluation_chunks(candidates)
+    candidates = filter_hits_by_focus(retrieval_query, candidates, doc_ids=doc_ids)
     candidates = prefilter_hits(retrieval_query, candidates, settings.retrieval_prefilter_top_k)
     if not candidates:
         candidates = _fallback_hits(doc_ids, settings.retrieval_prefilter_top_k)
+        candidates = filter_hits_by_focus(retrieval_query, candidates, doc_ids=doc_ids)
     if not candidates:
         refusal = "当前检索到的内容解析质量较差或证据不足，无法可靠回答这个问题。请尝试切换文档、重新上传更清晰的文件，或缩小问题范围。"
         append_user_message(session_id, message)
