@@ -7,6 +7,8 @@ from book_see_rag.config import get_settings
 from book_see_rag.chains.answer_cleanup import clean_answer_text
 from book_see_rag.chains.answer_guardrails import find_unsupported_numbers
 from book_see_rag.chains.answer_quality import inspect_answer_quality
+from book_see_rag.chains.evidence_brief import build_evidence_brief
+from book_see_rag.chains.refusal import EVIDENCE_REFUSAL_MESSAGE, QUALITY_FAILURE_MESSAGE, canonicalize_refusal_text
 from book_see_rag.embedding.reranker import rerank
 from book_see_rag.ingestion.splitter import is_noisy_chunk
 from book_see_rag.llm.factory import create_llm
@@ -15,15 +17,15 @@ from book_see_rag.memory.redis_memory import (
     append_user_message,
     get_recent_messages,
 )
-from book_see_rag.query_understanding import expand_query_terms, filter_hits_by_focus
+from book_see_rag.query_understanding import build_retrieval_queries, expand_query_terms, filter_hits_by_focus
 from book_see_rag.vectorstore.milvus_store import SearchHit, get_doc_hits, search_hits
-from book_see_rag.retrieval import filter_meta_evaluation_chunks, prefilter_hits
+from book_see_rag.retrieval import evidence_directly_supports, filter_meta_evaluation_chunks, merge_ranked_hits, prefilter_hits
 from book_see_rag.retrievers.llamaindex_retriever import LlamaIndexUnavailable, search_hits_with_llamaindex
 from book_see_rag.retrievers.scoped_documents import load_hits_from_uploads
 
 logger = logging.getLogger("uvicorn.error")
 
-_QUALITY_FAILURE_MESSAGE = "检索到相关证据，但生成结果未通过质量校验。请重试或缩小问题范围。"
+_QUALITY_FAILURE_MESSAGE = QUALITY_FAILURE_MESSAGE
 
 _PROMPT = ChatPromptTemplate.from_messages([
     ("system",
@@ -34,6 +36,11 @@ _PROMPT = ChatPromptTemplate.from_messages([
      "如果当前问题或对话历史已经指向某个具体对象，只回答该对象，不要混答其他对象。"
      "如果用户一次问多个问题，必须逐项回答，不能遗漏子问题。"
      "涉及日期、人数、比例、文件大小、技术名词时，必须严格照抄参考内容中的原文数字和名称，不要自行换算、修正或补全。"
+     "尽量直接复用参考内容中的原句或短语，不要自己改写成别的说法。"
+     "涉及权限问题时，只输出中文权限结论，不要输出 department、role、employee、hr_admin 等内部字段名。"
+     "不要使用 Markdown 表格、标题、加粗、代码块或项目符号；尽量输出纯文本。"
+     "根据问题类型控制答案长度：事实抽取用 1 到 2 句；对比、原因、分别说明、多事实问题可用 3 到 6 个短句完整回答。"
+     "如果参考内容中有可以直接复用的定义句、对比句或权限句，优先原样复用或轻微整理顺序，不要改写术语。"
      "不要把“推荐测试问题”或“标准答案要点”当成事实依据，除非用户明确询问测试题或标准答案。"
      "回答必须使用简洁、干净的中文，不要输出乱码、替换字符、重复标点或无意义符号。\n\n参考内容：\n{context}"),
     MessagesPlaceholder(variable_name="history"),
@@ -59,6 +66,11 @@ _STRICT_PROMPT = ChatPromptTemplate.from_messages([
      "如果当前问题或对话历史已经指向某个具体对象，只回答该对象，不要混答其他对象。"
      "答案中的日期、人数、比例、文件大小、技术名词必须从参考内容中逐字复制。"
      "如果某个数字或术语在参考内容中没有原样出现，禁止写入答案。"
+     "尽量直接复用参考内容中的原句或短语，不要自己改写成别的说法。"
+     "涉及权限问题时，只输出中文权限结论，不要输出 department、role、employee、hr_admin 等内部字段名。"
+     "不要使用 Markdown 表格、标题、加粗、代码块或项目符号；尽量输出纯文本。"
+     "根据问题类型控制答案长度：事实抽取用 1 到 2 句；对比、原因、分别说明、多事实问题可用 3 到 6 个短句完整回答。"
+     "如果参考内容中有可以直接复用的定义句、对比句或权限句，优先原样复用或轻微整理顺序，不要改写术语。"
      "不要添加参考内容没有的背景、解释或推断。"
      "不要使用“推荐测试问题”或“标准答案要点”作为事实依据。"
      "只输出最终答案，不要输出 user、assistant、system、调试文本或无关问题。"
@@ -76,7 +88,7 @@ def _inspect_guardrails(answer: str, context: str) -> tuple[list[str], list[str]
 
 
 def _augment_query(question: str) -> str:
-    normalized = expand_query_terms(question.strip())
+    normalized = expand_query_terms(question.strip(), include_route_hints=False)
     expansions: list[str] = []
     if any(term in normalized for term in ["技能", "擅长", "会什么", "能力", "技术栈"]):
         expansions.append("技能 技术栈 擅长 熟悉 掌握 能力")
@@ -140,6 +152,13 @@ def _retrieve_hits(query: str, doc_ids: list[str] | None) -> list[SearchHit]:
     return search_hits(query, doc_ids=doc_ids)
 
 
+def _retrieve_hits_for_queries(queries: list[str], doc_ids: list[str] | None) -> list[SearchHit]:
+    merged: list[SearchHit] = []
+    for query in queries:
+        merged = merge_ranked_hits(merged, _retrieve_hits(query, doc_ids=doc_ids))
+    return merged
+
+
 def _format_context(hits: list[SearchHit]) -> str:
     blocks = []
     for idx, item in enumerate(hits, 1):
@@ -174,18 +193,30 @@ def chat(
     rewrite_history = history[-settings.followup_rewrite_history:]
     t0 = time.perf_counter()
     retrieval_query = _rewrite_query(message, rewrite_history)
+    retrieval_queries = build_retrieval_queries(retrieval_query, doc_ids=doc_ids)
+    retrieval_query = retrieval_queries[0] if retrieval_queries else retrieval_query
     t_rewrite = time.perf_counter()
-    candidates = _retrieve_hits(retrieval_query, doc_ids=doc_ids)
+    candidates = _retrieve_hits_for_queries(retrieval_queries or [retrieval_query], doc_ids=doc_ids)
     t1 = time.perf_counter()
     candidates = _filter_hits(candidates)
     candidates = filter_meta_evaluation_chunks(candidates)
     candidates = filter_hits_by_focus(retrieval_query, candidates, doc_ids=doc_ids)
     candidates = prefilter_hits(retrieval_query, candidates, settings.retrieval_prefilter_top_k)
+    if candidates and not evidence_directly_supports(message, candidates):
+        append_user_message(session_id, message)
+        append_ai_message(session_id, EVIDENCE_REFUSAL_MESSAGE, candidates[:settings.rerank_top_k], scope=scope)
+        return {"answer": EVIDENCE_REFUSAL_MESSAGE, "sources": candidates[:settings.rerank_top_k]}
     if not candidates:
         candidates = _fallback_hits(doc_ids, settings.retrieval_prefilter_top_k)
+        candidates = filter_meta_evaluation_chunks(candidates)
         candidates = filter_hits_by_focus(retrieval_query, candidates, doc_ids=doc_ids)
+        candidates = prefilter_hits(retrieval_query, candidates, settings.retrieval_prefilter_top_k)
+        if candidates and not evidence_directly_supports(message, candidates):
+            append_user_message(session_id, message)
+            append_ai_message(session_id, EVIDENCE_REFUSAL_MESSAGE, candidates[:settings.rerank_top_k], scope=scope)
+            return {"answer": EVIDENCE_REFUSAL_MESSAGE, "sources": candidates[:settings.rerank_top_k]}
     if not candidates:
-        refusal = "当前检索到的内容解析质量较差或证据不足，无法可靠回答这个问题。请尝试切换文档、重新上传更清晰的文件，或缩小问题范围。"
+        refusal = EVIDENCE_REFUSAL_MESSAGE
         append_user_message(session_id, message)
         append_ai_message(session_id, refusal, [], scope=scope)
         return {"answer": refusal, "sources": []}
@@ -196,15 +227,23 @@ def chat(
         logger.info("Chat rerank disabled using top_k=%s from search results", len(ranked_hits))
     t2 = time.perf_counter()
     if not ranked_hits:
-        refusal = "当前没有足够干净且直接相关的证据，无法可靠回答这个问题。"
+        refusal = EVIDENCE_REFUSAL_MESSAGE
         append_user_message(session_id, message)
         append_ai_message(session_id, refusal, [], scope=scope)
         return {"answer": refusal, "sources": []}
     ranked_hits = filter_meta_evaluation_chunks(ranked_hits)
+    if not ranked_hits:
+        append_user_message(session_id, message)
+        append_ai_message(session_id, EVIDENCE_REFUSAL_MESSAGE, [], scope=scope)
+        return {"answer": EVIDENCE_REFUSAL_MESSAGE, "sources": []}
     context = _format_context(ranked_hits)
+    evidence_brief = build_evidence_brief(message, [item["content"] for item in ranked_hits])
+    if evidence_brief:
+        context = f"重点证据：\n{evidence_brief}\n\n---\n\n原始参考内容：\n{context}"
     llm = create_llm()
     chain = _PROMPT | llm | StrOutputParser()
     answer = clean_answer_text(chain.invoke({"question": message, "context": context, "history": history}))
+    answer = canonicalize_refusal_text(answer)
     unsupported_numbers, quality_issues = _inspect_guardrails(answer, context)
     if unsupported_numbers or quality_issues:
         logger.warning(
@@ -214,6 +253,7 @@ def chat(
         )
         strict_chain = _STRICT_PROMPT | llm | StrOutputParser()
         answer = clean_answer_text(strict_chain.invoke({"question": message, "context": context, "history": history}))
+        answer = canonicalize_refusal_text(answer)
         unsupported_numbers, quality_issues = _inspect_guardrails(answer, context)
         if unsupported_numbers or quality_issues:
             logger.warning(

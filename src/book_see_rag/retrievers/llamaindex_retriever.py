@@ -5,6 +5,7 @@ from typing import Any
 
 from book_see_rag.config import get_settings
 from book_see_rag.embedding.embedder import embed_documents, embed_query
+from book_see_rag.retrieval import keyword_rank_hits, merge_ranked_hits, section_window_hits, sentence_window_hits
 from book_see_rag.retrievers.scoped_documents import load_hits_from_uploads
 from book_see_rag.vectorstore.milvus_store import SearchHit, get_doc_hits
 
@@ -56,13 +57,20 @@ def search_hits_with_llamaindex(query: str, doc_ids: list[str] | None = None) ->
         return []
 
     Document, VectorStoreIndex, BaseEmbedding = _load_llamaindex()
+    keyword_pool_limit = max(
+        getattr(settings, "retrieval_keyword_pool_limit", 1000),
+        settings.llamaindex_candidate_limit,
+        settings.rerank_top_n * 10,
+    )
     try:
-        source_hits = get_doc_hits(doc_ids, limit=settings.llamaindex_candidate_limit)
+        keyword_pool = get_doc_hits(doc_ids, limit=keyword_pool_limit)
     except Exception:
         logger.exception("LlamaIndex failed to load chunks from Milvus, using upload fallback")
-        source_hits = []
+        keyword_pool = []
+    source_hits = keyword_pool[:settings.llamaindex_candidate_limit]
     if not source_hits:
         source_hits = load_hits_from_uploads(doc_ids, limit=settings.llamaindex_candidate_limit)
+        keyword_pool = source_hits
     if not source_hits:
         return []
 
@@ -84,11 +92,11 @@ def search_hits_with_llamaindex(query: str, doc_ids: list[str] | None = None) ->
     )
     nodes = index.as_retriever(similarity_top_k=settings.llamaindex_top_k).retrieve(query)
 
-    hits: list[SearchHit] = []
+    vector_hits: list[SearchHit] = []
     for node_with_score in nodes:
         node = node_with_score.node
         metadata = node.metadata or {}
-        hits.append(
+        vector_hits.append(
             {
                 "doc_id": metadata.get("doc_id", ""),
                 "filename": metadata.get("filename", ""),
@@ -97,5 +105,19 @@ def search_hits_with_llamaindex(query: str, doc_ids: list[str] | None = None) ->
                 "score": float(node_with_score.score or 0.0),
             }
         )
-    logger.info("LlamaIndex retriever finished source_hits=%s hits=%s", len(source_hits), len(hits))
+    window_top_k = getattr(settings, "retrieval_window_top_k", settings.llamaindex_top_k)
+    section_hits = section_window_hits(query, keyword_pool, window_top_k)
+    sentence_hits = sentence_window_hits(query, keyword_pool, window_top_k)
+    keyword_hits = keyword_rank_hits(query, keyword_pool, window_top_k)
+    hits = merge_ranked_hits(section_hits, sentence_hits, keyword_hits, vector_hits)
+    logger.info(
+        "LlamaIndex hybrid retriever finished source_hits=%s keyword_pool=%s section_hits=%s sentence_hits=%s keyword_hits=%s vector_hits=%s hits=%s",
+        len(source_hits),
+        len(keyword_pool),
+        len(section_hits),
+        len(sentence_hits),
+        len(keyword_hits),
+        len(vector_hits),
+        len(hits),
+    )
     return hits

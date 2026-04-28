@@ -54,7 +54,9 @@ QUESTIONS = [
     "如果系统回答没有引用或引用不支持结论，应该如何处理？",
 ]
 
-_REFUSAL_RE = re.compile(r"无法可靠回答|依据不足|未通过质量校验|没有足够.*证据|检索不到直接证据")
+_REFUSAL_RE = re.compile(
+    r"无法可靠回答|未通过质量校验|没有足够.*证据|没有直接证据支持|没有涉及|没有相关信息|没有关于"
+)
 
 
 def _source_preview(item: object) -> dict:
@@ -139,10 +141,10 @@ def evaluate_row(row: dict, case: dict, k: int = 5) -> dict:
     mrr = 1 / first_rank if first_rank else 0.0
     actual_dcg = _dcg([rank for rank in source_ranks if rank is not None])
     ideal_dcg = _dcg(list(range(1, min(source_total, k) + 1))) if source_total else 0.0
-    ndcg_at_k = actual_dcg / ideal_dcg if ideal_dcg else 0.0
+    ndcg_at_k = min(1.0, actual_dcg / ideal_dcg) if ideal_dcg else 0.0
 
     unsupported_numbers = find_unsupported_numbers(answer_text, source_text)
-    quality_issues = inspect_answer_quality(answer_text)
+    quality_issues = inspect_answer_quality(answer_text, source_text)
     refused = bool(_REFUSAL_RE.search(answer_text))
     hallucinated = bool(unsupported_numbers or quality_issues or forbidden_matched)
     answer_correct = answer_total > 0 and answer_matched == answer_total and not refused and not hallucinated
@@ -362,31 +364,62 @@ def main() -> None:
 
 
 def _to_markdown(payload: dict) -> str:
+    summary_labels = {
+        "case_count": "用例数",
+        "answer_accuracy": "答案准确率",
+        "avg_answer_score": "平均答案得分",
+        "avg_recall_at_k": f"平均召回率@{payload['k']}",
+        "avg_mrr": "平均 MRR",
+        "avg_ndcg_at_k": f"平均 nDCG@{payload['k']}",
+        "refusal_rate": "拒答率",
+        "hallucination_rate": "幻觉率",
+    }
+    evaluation_labels = {
+        "answer_score": "答案得分",
+        "answer_correct": "答案正确",
+        "recall_at_k": f"召回率@{payload['k']}",
+        "mrr": "MRR",
+        "ndcg_at_k": f"nDCG@{payload['k']}",
+        "refused": "是否拒答",
+        "hallucinated": "是否幻觉",
+        "unsupported_numbers": "未被证据支持的数值",
+        "quality_issues": "质量问题",
+    }
+    category_labels = {
+        "case_count": "用例数",
+        "answer_accuracy": "答案准确率",
+        "avg_answer_score": "平均答案得分",
+        "avg_recall_at_k": f"平均召回率@{payload['k']}",
+        "avg_mrr": "平均 MRR",
+        "avg_ndcg_at_k": f"平均 nDCG@{payload['k']}",
+        "refusal_rate": "拒答率",
+        "hallucination_rate": "幻觉率",
+    }
     lines = [
-        "# RAG Benchmark Result",
+        "# RAG Benchmark 结果",
         "",
         f"- 文件：{payload['filename']}",
-        f"- doc_id：{payload['doc_id']}",
-        f"- eval_set：{payload['eval_set']}",
-        f"- retrieval_backend：{payload['retrieval_backend']}",
-        f"- mode：{payload['mode']}",
-        f"- api_base：{payload['api_base'] or 'local-chain'}",
-        f"- K：{payload['k']}",
+        f"- 文档 ID：{payload['doc_id']}",
+        f"- 评测集：{payload['eval_set']}",
+        f"- 检索后端：{payload['retrieval_backend']}",
+        f"- 评测模式：{payload['mode']}",
+        f"- API 基址：{payload['api_base'] or 'local-chain'}",
+        f"- 召回数 K：{payload['k']}",
         f"- 问题数：{payload['question_count']}",
         "",
     ]
     if payload.get("summary"):
-        lines.extend(["## Summary", ""])
+        lines.extend(["## 总体结果", ""])
         for key, value in payload["summary"].items():
-            lines.append(f"- {key}：{value}")
+            lines.append(f"- {summary_labels.get(key, key)}：{value}")
         lines.append("")
     if payload.get("category_summary"):
-        lines.extend(["## Category Summary", ""])
+        lines.extend(["## 分类结果", ""])
         for category, metrics in payload["category_summary"].items():
             lines.append(f"### {category}")
             lines.append("")
             for key, value in metrics.items():
-                lines.append(f"- {key}：{value}")
+                lines.append(f"- {category_labels.get(key, key)}：{value}")
             lines.append("")
 
     for row in payload["results"]:
@@ -394,8 +427,8 @@ def _to_markdown(payload: dict) -> str:
             [
                 f"## {row['index']}. {row['question']}",
                 "",
-                f"- case_id：{row['case_id']}",
-                f"- categories：{', '.join(row.get('categories') or [])}",
+                f"- 用例 ID：{row['case_id']}",
+                f"- 分类：{', '.join(row.get('categories') or [])}",
                 f"- 耗时：{row['elapsed_seconds']}s",
                 f"- 引用数量：{row['source_count']}",
             ]
@@ -404,15 +437,15 @@ def _to_markdown(payload: dict) -> str:
             evaluation = row["evaluation"]
             lines.extend(
                 [
-                    f"- answer_score：{evaluation['answer_score']}",
-                    f"- answer_correct：{evaluation['answer_correct']}",
-                    f"- recall@{payload['k']}：{evaluation['recall_at_k']}",
-                    f"- mrr：{evaluation['mrr']}",
-                    f"- ndcg@{payload['k']}：{evaluation['ndcg_at_k']}",
-                    f"- refused：{evaluation['refused']}",
-                    f"- hallucinated：{evaluation['hallucinated']}",
-                    f"- unsupported_numbers：{evaluation['unsupported_numbers']}",
-                    f"- quality_issues：{evaluation['quality_issues']}",
+                    f"- {evaluation_labels['answer_score']}：{evaluation['answer_score']}",
+                    f"- {evaluation_labels['answer_correct']}：{evaluation['answer_correct']}",
+                    f"- {evaluation_labels['recall_at_k']}：{evaluation['recall_at_k']}",
+                    f"- {evaluation_labels['mrr']}：{evaluation['mrr']}",
+                    f"- {evaluation_labels['ndcg_at_k']}：{evaluation['ndcg_at_k']}",
+                    f"- {evaluation_labels['refused']}：{evaluation['refused']}",
+                    f"- {evaluation_labels['hallucinated']}：{evaluation['hallucinated']}",
+                    f"- {evaluation_labels['unsupported_numbers']}：{evaluation['unsupported_numbers']}",
+                    f"- {evaluation_labels['quality_issues']}：{evaluation['quality_issues']}",
                 ]
             )
         lines.extend(["", row["answer"], "", "引用预览："])

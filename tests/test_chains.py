@@ -4,17 +4,26 @@ from types import SimpleNamespace
 from book_see_rag.chains.answer_cleanup import clean_answer_text
 from book_see_rag.chains.answer_guardrails import find_unsupported_numbers
 from book_see_rag.chains.answer_quality import inspect_answer_quality
+from book_see_rag.chains.evidence_brief import build_evidence_brief
+from book_see_rag.chains.refusal import EVIDENCE_REFUSAL_MESSAGE, canonicalize_refusal_text
 from book_see_rag.query_understanding import (
     choose_profile,
     detect_ambiguous_objects,
+    build_retrieval_queries,
     expand_query_terms,
     extract_explicit_objects,
     filter_hits_by_focus,
     is_underspecified_query,
 )
 from book_see_rag.retrieval import (
+    content_terms,
+    evidence_directly_supports,
     filter_meta_evaluation_chunks,
+    keyword_rank_hits,
+    merge_ranked_hits,
     prefilter_hits,
+    section_window_hits,
+    sentence_window_hits,
 )
 
 
@@ -86,10 +95,11 @@ def test_qa_returns_quality_failure_when_strict_retry_still_bad():
     from book_see_rag.chains import qa_chain
 
     with patch("book_see_rag.chains.qa_chain.get_settings", return_value=settings), \
-         patch("book_see_rag.chains.qa_chain._retrieve_hits", return_value=hits), \
-         patch("book_see_rag.chains.qa_chain.create_llm", return_value=MagicMock()), \
-         patch("book_see_rag.chains.qa_chain._PROMPT", _FakePrompt("chunk far太小，chunk 太nard。")), \
-         patch("book_see_rag.chains.qa_chain._STRICT_PROMPT", _FakePrompt("答案如下：\n- ")):
+        patch("book_see_rag.chains.qa_chain._retrieve_hits", return_value=hits), \
+        patch("book_see_rag.chains.qa_chain.evidence_directly_supports", return_value=True), \
+        patch("book_see_rag.chains.qa_chain.create_llm", return_value=MagicMock()), \
+        patch("book_see_rag.chains.qa_chain._PROMPT", _FakePrompt("chunkization far 太nard。")), \
+        patch("book_see_rag.chains.qa_chain._STRICT_PROMPT", _FakePrompt("chunkization far 太nard。")):
         result = qa_chain.answer("BM25 是什么？")
 
     assert result["answer"] == qa_chain._QUALITY_FAILURE_MESSAGE
@@ -129,6 +139,7 @@ def test_chat_returns_answer_and_persists_sources(mock_retrieval):
          patch("book_see_rag.chains.chat_chain._PROMPT") as mock_prompt, \
          patch("book_see_rag.chains.chat_chain._REWRITE_PROMPT") as rewrite_prompt, \
          patch("book_see_rag.chains.chat_chain.get_recent_messages", return_value=[]), \
+         patch("book_see_rag.chains.chat_chain.evidence_directly_supports", return_value=True), \
          patch("book_see_rag.chains.chat_chain.append_user_message") as append_user, \
          patch("book_see_rag.chains.chat_chain.append_ai_message") as append_ai:
         rewrite_chain = MagicMock()
@@ -167,12 +178,13 @@ def test_chat_returns_quality_failure_when_strict_retry_still_bad():
     with patch("book_see_rag.chains.chat_chain.get_settings", return_value=settings), \
          patch("book_see_rag.chains.chat_chain.get_recent_messages", return_value=[]), \
          patch("book_see_rag.chains.chat_chain._rewrite_query", return_value="BM25 是什么？"), \
-         patch("book_see_rag.chains.chat_chain._retrieve_hits", return_value=hits), \
-         patch("book_see_rag.chains.chat_chain.create_llm", return_value=MagicMock()), \
-         patch("book_see_rag.chains.chat_chain.append_user_message") as append_user, \
-         patch("book_see_rag.chains.chat_chain.append_ai_message") as append_ai, \
-         patch("book_see_rag.chains.chat_chain._PROMPT", _FakePrompt("chunk far太小，chunk 太nard。")), \
-         patch("book_see_rag.chains.chat_chain._STRICT_PROMPT", _FakePrompt("答案如下：\n- ")):
+        patch("book_see_rag.chains.chat_chain._retrieve_hits", return_value=hits), \
+        patch("book_see_rag.chains.chat_chain.evidence_directly_supports", return_value=True), \
+        patch("book_see_rag.chains.chat_chain.create_llm", return_value=MagicMock()), \
+        patch("book_see_rag.chains.chat_chain.append_user_message") as append_user, \
+        patch("book_see_rag.chains.chat_chain.append_ai_message") as append_ai, \
+        patch("book_see_rag.chains.chat_chain._PROMPT", _FakePrompt("chunkization far 太nard。")), \
+        patch("book_see_rag.chains.chat_chain._STRICT_PROMPT", _FakePrompt("chunkization far 太nard。")):
         result = chat_chain.chat("session-001", "BM25 是什么？")
 
     assert result["answer"] == chat_chain._QUALITY_FAILURE_MESSAGE
@@ -280,6 +292,37 @@ def test_expand_query_terms_adds_hardware_synonyms():
     assert "图形处理器" in expanded
 
 
+def test_expand_query_terms_adds_retrieval_synonyms():
+    expanded = expand_query_terms("为什么需要检索增强生成和引用校验？")
+    assert "RAG" in expanded
+    assert "先检索再回答" in expanded
+    assert "不能编造答案" in expanded
+
+
+def test_expand_query_terms_adds_permission_synonyms():
+    expanded = expand_query_terms("为什么企业 RAG 系统需要最小权限模型？")
+    assert "用户只能看到自己有权访问的知识库" in expanded
+    assert "越权过滤" in expanded
+
+
+def test_expand_query_terms_adds_topic_route_hints():
+    expanded = expand_query_terms("RAG 和普通大模型问答有什么区别？")
+    assert "RAG 的关键是先从知识库检索证据" in expanded
+    assert "再让大模型基于证据回答" in expanded
+
+    expanded = expand_query_terms("LlamaIndex 在当前系统里做了哪些事？")
+    assert "将系统已有的 chunk 包装成 LlamaIndex Document" in expanded
+    assert "将 node 转回系统统一的 SearchHit" in expanded
+
+
+def test_build_retrieval_queries_splits_abstract_topics_into_variants():
+    queries = build_retrieval_queries("RAG 和普通大模型问答有什么区别？")
+    assert len(queries) >= 2
+    assert queries[0].startswith("RAG 和普通大模型问答有什么区别？")
+    assert any("RAG 的关键是先从知识库检索证据" in query for query in queries)
+    assert any("普通大模型只依赖模型内部知识" in query for query in queries)
+
+
 def test_filter_hits_by_focus_prefers_target_object():
     hits = [
         {"doc_id": "d1", "filename": "联想.docx", "page": 1, "content": "联想小新Pro 16 2024款 重量：1.92kg", "score": 0.8},
@@ -289,6 +332,19 @@ def test_filter_hits_by_focus_prefers_target_object():
     filtered = filter_hits_by_focus("联想小新Pro 16 多重？", hits)
 
     assert filtered == [hits[0]]
+
+
+def test_filter_hits_by_focus_keeps_abstract_context_as_soft_filter():
+    hits = [
+        {"doc_id": "d1", "filename": "rag.md", "page": 1, "content": "BM25 是一种经典关键词检索算法。", "score": 0.8},
+        {"doc_id": "d1", "filename": "rag.md", "page": 2, "content": "向量检索是一种语义检索方式。", "score": 0.7},
+        {"doc_id": "d1", "filename": "rag.md", "page": 3, "content": "reranker 负责对候选内容进行更精细的相关性排序。", "score": 0.6},
+    ]
+
+    filtered = filter_hits_by_focus("请对比 BM25、向量检索和 reranker", hits)
+
+    assert {hit["page"] for hit in filtered} == {1, 2, 3}
+    assert filtered[0]["page"] in {1, 3}
 
 
 def test_chat_uses_focus_filter_for_followup_query():
@@ -341,6 +397,10 @@ def test_detect_ambiguous_objects_returns_multiple_candidates():
     assert objects == ["联想小新Pro 16 2024款", "联想拯救者Y9000P 2024款"]
 
 
+def test_is_underspecified_query_allows_explicit_technical_topics():
+    assert is_underspecified_query("LlamaIndex 当前做了什么？") is False
+
+
 def test_choose_profile_prefers_explicit_kb_binding():
     docs = [{"doc_id": "d1", "filename": "notes.txt", "kb_id": "kb_laptop"}]
     kb = {"kb_id": "kb_laptop", "name": "Laptop KB", "visibility": "public", "query_profile": "laptop"}
@@ -390,6 +450,192 @@ def test_prefilter_hits_downranks_meta_evaluation_chunks():
     assert ranked[0]["content"].startswith("系统目前支持四种文件格式")
 
 
+def test_prefilter_hits_prefers_exact_sentence_match_for_abstract_topics():
+    hits = [
+        {"doc_id": "d1", "filename": "rag.md", "page": 1, "content": "RAG 的关键是先从知识库检索证据，再让大模型基于证据回答。普通大模型问答只依赖模型内部知识。", "score": 0.55},
+        {"doc_id": "d1", "filename": "rag.md", "page": 2, "content": "本节介绍系统背景和测试目的，没有回答 RAG 与普通大模型的区别。", "score": 0.95},
+    ]
+    ranked = prefilter_hits("RAG 和普通大模型问答有什么区别？", hits, limit=2)
+    assert ranked[0]["page"] == 1
+
+
+def test_keyword_rank_hits_finds_exact_terms_even_when_dense_score_is_low():
+    hits = [
+        {"doc_id": "d1", "filename": "rag.md", "page": 1, "content": "系统背景说明。", "score": 0.95},
+        {"doc_id": "d1", "filename": "rag.md", "page": 2, "content": "Chunk 不是中文分词，chunk 是较大的文本片段。", "score": 0.1},
+    ]
+
+    ranked = keyword_rank_hits("chunk 和中文分词是一回事吗？", hits, limit=2)
+
+    assert ranked[0]["page"] == 2
+
+
+def test_content_terms_filters_question_bigram_noise():
+    terms = content_terms("RAG 和普通大模型问答有什么区别？")
+
+    assert "rag" in terms
+    assert "普通大模型" in terms
+    assert "和普" not in terms
+    assert "有什" not in terms
+    assert "么区" not in terms
+    assert "索风" not in content_terms("当前系统有哪些检索风险？")
+    assert "这个系统用" not in content_terms("这个系统怎么用？")
+
+
+def test_sentence_window_hits_extracts_direct_evidence_sentences():
+    hits = [
+        {
+            "doc_id": "d1",
+            "filename": "rag.md",
+            "page": 1,
+            "content": "前置说明。RAG 的关键是先从知识库检索证据，再让大模型基于证据回答。后续说明。",
+            "score": 0.1,
+        },
+    ]
+
+    ranked = sentence_window_hits("RAG 和普通大模型问答有什么区别？", hits, limit=1)
+
+    assert len(ranked) == 1
+    assert "RAG 的关键是先从知识库检索证据" in ranked[0]["content"]
+    assert "基于证据回答" in ranked[0]["content"]
+
+
+def test_section_window_hits_recovers_heading_scoped_evidence():
+    hits = [
+        {
+            "doc_id": "d1",
+            "filename": "rag.md",
+            "page": 1,
+            "content": (
+                "3. Chunk 策略\n"
+                "chunk_size 表示单个文本片段的最大长度。\n"
+                "chunk_overlap 表示相邻 chunk 之间重复保留的字符数量。\n"
+                "4. BM25 与向量检索的区别\n"
+                "BM25 是一种经典关键词检索算法。\n"
+                "向量检索是一种语义检索方式。"
+            ),
+            "score": 0.1,
+        },
+    ]
+
+    ranked = section_window_hits("chunk_size 和 chunk_overlap 分别是什么意思？", hits, limit=1)
+
+    assert len(ranked) == 1
+    assert ranked[0]["content"].startswith("3. Chunk 策略")
+    assert "chunk_overlap 表示相邻 chunk 之间重复保留" in ranked[0]["content"]
+
+
+def test_section_window_hits_does_not_treat_short_fact_lines_as_headings():
+    hits = [
+        {
+            "doc_id": "d1",
+            "filename": "rag.md",
+            "page": 1,
+            "content": (
+                "3. 检索组件\n"
+                "BM25 是一种经典关键词检索算法\n"
+                "向量检索是一种语义检索方式\n"
+                "reranker 负责对候选内容进行更精细的相关性排序"
+            ),
+            "score": 0.1,
+        },
+    ]
+
+    ranked = section_window_hits("请对比 BM25、向量检索和 reranker", hits, limit=1)
+
+    assert len(ranked) == 1
+    assert ranked[0]["content"].startswith("3. 检索组件")
+    assert "向量检索是一种语义检索方式" in ranked[0]["content"]
+    assert "reranker 负责对候选内容" in ranked[0]["content"]
+
+
+def test_section_window_hits_does_not_split_numbered_list_items_as_headings():
+    hits = [
+        {
+            "doc_id": "d1",
+            "filename": "rag.md",
+            "page": 1,
+            "content": (
+                "5. LlamaIndex 在本系统中的定位\n"
+                "1. 系统已有的 chunk 被包装成 LlamaIndex Document\n"
+                "2. 构建临时 VectorStoreIndex\n"
+                "3. 使用 LlamaIndex retriever 从指定文档范围内召回相关 node"
+            ),
+            "score": 0.1,
+        },
+    ]
+
+    ranked = section_window_hits("LlamaIndex 在当前系统里做了哪些事？", hits, limit=3)
+
+    assert len(ranked) == 1
+    assert "构建临时 VectorStoreIndex" in ranked[0]["content"]
+    assert "召回相关 node" in ranked[0]["content"]
+
+
+def test_sentence_window_hits_keeps_best_window_per_source_chunk():
+    hits = [
+        {
+            "doc_id": "d1",
+            "filename": "rag.md",
+            "page": 1,
+            "content": (
+                "BM25 是一种经典关键词检索算法。"
+                "BM25 擅长精确匹配。"
+                "BM25 和向量检索通常是互补关系。"
+            ),
+            "score": 0.1,
+        },
+    ]
+
+    ranked = sentence_window_hits("BM25 和向量检索是替代关系吗？", hits, limit=3)
+
+    assert len(ranked) == 1
+    assert "互补关系" in ranked[0]["content"]
+
+
+def test_merge_ranked_hits_deduplicates_keyword_and_vector_results():
+    hit = {"doc_id": "d1", "filename": "rag.md", "page": 1, "content": "BM25 是一种经典关键词检索算法。", "score": 0.8}
+
+    merged = merge_ranked_hits([hit], [hit])
+
+    assert merged == [hit]
+
+
+def test_evidence_directly_supports_refuses_unrelated_question():
+    hits = [
+        {"doc_id": "d1", "filename": "rag.md", "page": 1, "content": "系统目前支持四种文件格式：PDF、DOCX、TXT、Markdown。", "score": 0.8},
+    ]
+
+    assert evidence_directly_supports("星澜知识助手项目的食堂菜单是什么？", hits) is False
+    assert evidence_directly_supports("当前系统支持哪些文件格式？", hits) is True
+
+
+def test_evidence_directly_supports_allows_permission_evidence():
+    hits = [
+        {
+            "doc_id": "d1",
+            "filename": "rag.md",
+            "page": 1,
+            "content": "研发部门员工李明的 department 是 rd，role 是 employee。他可以访问公共知识库和研发知识库，但不能访问人事知识库。",
+            "score": 0.8,
+        },
+    ]
+
+    assert evidence_directly_supports("研发员工李明能访问哪些知识库？不能访问哪个知识库？", hits) is True
+
+
+def test_canonicalize_refusal_text_does_not_rewrite_legitimate_negative_facts():
+    answer = "LlamaIndex 没有替代文档解析、权限控制和最终回答生成。"
+
+    assert canonicalize_refusal_text(answer) == answer
+
+
+def test_canonicalize_refusal_text_rewrites_direct_refusal():
+    answer = "参考内容中没有涉及食堂菜单的相关信息。"
+
+    assert canonicalize_refusal_text(answer) == EVIDENCE_REFUSAL_MESSAGE
+
+
 def test_filter_meta_evaluation_chunks_removes_meta_when_possible():
     hits = [
         {"doc_id": "d1", "filename": "doc.pdf", "page": 1, "content": "推荐测试问题：当前系统支持哪些文件格式？", "score": 0.95},
@@ -397,6 +643,14 @@ def test_filter_meta_evaluation_chunks_removes_meta_when_possible():
     ]
     filtered = filter_meta_evaluation_chunks(hits)
     assert len(filtered) == 1
+
+
+def test_filter_meta_evaluation_chunks_keeps_standard_answer_when_all_hits_are_meta():
+    hits = [
+        {"doc_id": "d1", "filename": "doc.pdf", "page": 1, "content": "标准答案要点：问题 14 的答案应说明：通常对 chunk 分别做 embedding。", "score": 0.95},
+    ]
+
+    assert filter_meta_evaluation_chunks(hits) == hits
 
 
 def test_inspect_answer_quality_allows_evidence_aligned_tech_terms():
@@ -432,8 +686,17 @@ def test_find_unsupported_numbers_detects_answer_numbers_not_in_evidence():
     assert unsupported == ["35人"]
 
 
+def test_find_unsupported_numbers_ignores_markdown_list_numbers():
+    evidence = "1. 常见制度问题回答准确率不低于 85%\n2. 带引用回答的引用命中率不低于 90%\n3. 10MB 以内文档的异步摄入任务应在 3 分钟内完成"
+    answer = "1. 常见制度问题回答准确率不低于 85%\n2. 带引用回答的引用命中率不低于 90%\n3. 10MB 以内文档的异步摄入任务应在 3 分钟内完成"
+
+    unsupported = find_unsupported_numbers(answer, evidence)
+
+    assert unsupported == []
+
+
 def test_inspect_answer_quality_detects_benchmark_bad_outputs():
-    assert "contains_garbled_english" in inspect_answer_quality("chunk far太小，chunk 太nard。")
+    assert "contains_garbled_english" in inspect_answer_quality("chunkization far 太nard。")
     assert "contains_garbled_english" in inspect_answer_quality("Milvus 作为向 kuku，pérdida。")
     assert "contains_prompt_leak" in inspect_answer_quality("user 请问一下 LlamaIndex 的 reranker 是什么？")
     assert "contains_repeated_terms" in inspect_answer_quality("Redis 保存多轮会会会话记忆。")
@@ -451,6 +714,12 @@ def test_inspect_answer_quality_allows_spaced_model_terms_when_evidence_has_comp
     assert inspect_answer_quality(answer, evidence_text=evidence) == []
 
 
+def test_inspect_answer_quality_allows_common_technical_explanations():
+    answer = "chunk_size 和 chunk_overlap 是 RAG 中常见的 chunk 切分参数，embedding 通常按 chunk 计算。"
+    evidence = "chunk_size 表示单个文本片段的最大长度，chunk_overlap 表示相邻 chunk 之间重复保留的字符数量。Embedding 通常对切分后的 chunk 分别做。"
+    assert inspect_answer_quality(answer, evidence_text=evidence) == []
+
+
 def test_clean_answer_text_removes_broken_chars_and_common_noise():
     raw = "根据提供的信息，，L1mmaIndex 和 MIlvus\n`chunksize 表示 单�个文本片段。chunk overlap �表示 重复保留。发研知识库 85%% token)) embeddingding"
     cleaned = clean_answer_text(raw)
@@ -465,3 +734,45 @@ def test_clean_answer_text_removes_broken_chars_and_common_noise():
     assert "chunk_size" in cleaned
     assert "chunk_overlap" in cleaned
     assert "研发知识库" in cleaned
+
+
+def test_clean_answer_text_strips_markdown_formatting():
+    raw = "## **公共知识库**：对所有员工可见\n- **研发知识库**：仅对研发部门和技术负责人可见\n| **人事知识库** | 仅对 HR 部门和 HR 管理员可见 |"
+    cleaned = clean_answer_text(raw)
+    assert "#" not in cleaned
+    assert "**" not in cleaned
+    assert "|" not in cleaned
+    assert "公共知识库：对所有员工可见" in cleaned
+    assert "研发知识库：仅对研发部门和技术负责人可见" in cleaned
+    assert "人事知识库 仅对 HR 部门和 HR 管理员可见" in cleaned
+
+
+def test_clean_answer_text_removes_internal_permission_fields():
+    raw = (
+        "李明是研发部门员工（department为rd，role为employee），可以访问公共知识库和研发知识库，"
+        "不能访问人事知识库，因为他属于 rd 部门且角色为 employee。"
+        "王敏是HR管理员（role为hr_admin），可以访问人事知识库。"
+    )
+    cleaned = clean_answer_text(raw)
+
+    assert "department" not in cleaned
+    assert "role" not in cleaned
+    assert "employee" not in cleaned
+    assert "hr_admin" not in cleaned
+    assert "李明是研发部门员工，可以访问公共知识库和研发知识库" in cleaned
+    assert "不能访问人事知识库" in cleaned
+    assert "王敏是HR管理员，可以访问人事知识库" in cleaned
+
+
+def test_build_evidence_brief_extracts_relevant_sentences():
+    question = "RAG 和普通大模型问答有什么区别？"
+    chunks = [
+        "RAG 的关键是先从知识库检索证据，再让大模型基于证据回答。普通大模型问答只依赖模型内部知识。",
+        "chunk 是文档切分的概念，与中文分词不是一回事。",
+    ]
+
+    brief = build_evidence_brief(question, chunks)
+
+    assert "先从知识库检索证据" in brief
+    assert "基于证据回答" in brief
+    assert "普通大模型问答" in brief

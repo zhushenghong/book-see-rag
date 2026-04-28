@@ -5,12 +5,14 @@ import re
 
 _NUMBER_RE = re.compile(r"\d+(?:\.\d+)?\s*(?:年|月|日|人|名|%|MB|GB|KB|MHz|GHz|kg|mm|Wh|mah|W|Hz|nit)?", re.IGNORECASE)
 _UNIT_SUFFIXES = ("年", "月", "日", "人", "名", "%", "mb", "gb", "kb", "mhz", "ghz", "kg", "mm", "wh", "mah", "w", "hz", "nit")
+_LIST_MARKER_RE = re.compile(r"^\s*\d+[.)、]\s*")
 
 
 def extract_numbers(text: str) -> list[str]:
     numbers: list[str] = []
     seen: set[str] = set()
-    for match in _NUMBER_RE.findall(text):
+    normalized_text = "\n".join(_LIST_MARKER_RE.sub("", line) for line in text.splitlines())
+    for match in _NUMBER_RE.findall(normalized_text):
         value = re.sub(r"\s+", "", match)
         if value and value not in seen:
             seen.add(value)

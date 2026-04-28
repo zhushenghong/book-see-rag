@@ -14,10 +14,12 @@ from pymilvus import (
 from langchain_core.documents import Document
 from book_see_rag.config import get_settings
 from book_see_rag.embedding.embedder import embed_documents, embed_query
+from book_see_rag.retrieval import keyword_rank_hits, merge_ranked_hits, section_window_hits, sentence_window_hits
 
 logger = logging.getLogger("uvicorn.error")
 
 COLLECTION_NAME = None  # 从 settings 读取
+DEFAULT_KEYWORD_POOL_LIMIT = 1000
 
 
 class SearchHit(TypedDict):
@@ -162,10 +164,28 @@ def search_hits(query: str, doc_ids: list[str] | None = None) -> list[SearchHit]
             continue
         seen.add(dedupe_key)
         chunks.append(item)
+    keyword_hits: list[SearchHit] = []
+    sentence_hits: list[SearchHit] = []
+    section_hits: list[SearchHit] = []
+    if doc_ids:
+        keyword_pool_limit = max(
+            getattr(settings, "retrieval_keyword_pool_limit", DEFAULT_KEYWORD_POOL_LIMIT),
+            getattr(settings, "llamaindex_candidate_limit", 80),
+            settings.rerank_top_n * 10,
+        )
+        keyword_pool = get_doc_hits(doc_ids, limit=keyword_pool_limit)
+        window_top_k = getattr(settings, "retrieval_window_top_k", settings.rerank_top_n)
+        section_hits = section_window_hits(query, keyword_pool, window_top_k)
+        sentence_hits = sentence_window_hits(query, keyword_pool, window_top_k)
+        keyword_hits = keyword_rank_hits(query, keyword_pool, window_top_k)
+        chunks = merge_ranked_hits(section_hits, sentence_hits, keyword_hits, chunks)
     logger.info(
-        "Milvus search finished query=%r doc_filter=%s hits=%s elapsed=%.3fs",
+        "Milvus hybrid search finished query=%r doc_filter=%s section_hits=%s sentence_hits=%s keyword_hits=%s hits=%s elapsed=%.3fs",
         query[:80],
         bool(doc_ids),
+        len(section_hits),
+        len(sentence_hits),
+        len(keyword_hits),
         len(chunks),
         time.perf_counter() - started,
     )

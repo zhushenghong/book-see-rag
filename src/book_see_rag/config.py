@@ -34,6 +34,8 @@ class Settings(BaseSettings):
     rerank_top_k: int = 10
     retrieval_prefilter_top_k: int = 24
     retrieval_backend: str = "llamaindex"
+    retrieval_keyword_pool_limit: int = 1000
+    retrieval_window_top_k: int = 24
     llamaindex_candidate_limit: int = 80
     llamaindex_top_k: int = 24
     query_embedding_cache_size: int = 256

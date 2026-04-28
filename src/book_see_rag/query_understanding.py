@@ -22,6 +22,21 @@ _GENERIC_AMBIGUOUS_QUERY_TERMS = {
 _GENERIC_OBJECT_NOISE_TERMS = {
     "基本参数", "主要特点", "对比总结", "参数", "配置", "概述", "简介", "总结",
 }
+_EXPLICIT_QUERY_ANCHORS = {
+    "llamaindex",
+    "milvus",
+    "bm25",
+    "rag",
+    "reranker",
+    "embedding",
+    "embeddings",
+    "vectorstore",
+    "fastapi",
+    "redis",
+    "celery",
+    "streamlit",
+    "ocr",
+}
 
 
 @dataclass(frozen=True)
@@ -36,6 +51,25 @@ class DomainProfile:
 
 
 DEFAULT_PROFILE = DomainProfile(
+    query_synonyms={
+        "检索增强生成": "RAG 不是单纯的大模型问答 先检索再回答 先从知识库检索证据 基于证据回答",
+        "文档切分": "chunk 不是中文分词 文本片段 长文档 片段",
+        "向量化": "embedding 通常对 chunk 分别做 计算向量",
+        "重排序器": "reranker 负责对候选证据排序 相关性排序",
+        "关键词检索": "BM25 精确匹配",
+        "语义检索": "向量检索 语义相似",
+        "最小权限": "用户只能看到自己有权访问的知识库 用户只能检索自己有权访问的文档 无权限 doc_id 必须过滤 越权过滤",
+        "引用校验": "回答必须可追溯 如果检索不到直接证据 不能编造答案 依据不足",
+        "可追溯": "回答必须可追溯 不能编造答案",
+        "rag": "RAG 不是单纯的大模型问答 先检索再回答 先从知识库检索证据 基于证据回答",
+        "chunk": "chunk 不是中文分词 文本片段 长文档 片段",
+        "embedding": "embedding 通常对 chunk 分别做 计算向量",
+        "reranker": "reranker 负责对候选证据排序 相关性排序",
+        "bm25": "关键词检索 精确匹配",
+        "向量检索": "语义检索 语义相似",
+        "最小权限模型": "用户只能看到自己有权访问的知识库 用户只能检索自己有权访问的文档 无权限 doc_id 必须过滤 越权过滤",
+        "llamaindex": "不是大模型 不是向量数据库 编排层 Document VectorStoreIndex retriever SearchHit",
+    },
     focus_stopwords=_GENERIC_FOCUS_STOPWORDS,
     object_noise_terms=_GENERIC_OBJECT_NOISE_TERMS,
     ambiguous_query_terms=_GENERIC_AMBIGUOUS_QUERY_TERMS,
@@ -152,13 +186,20 @@ def choose_profile(query: str, hits: list[RankedHit] | None = None, doc_ids: lis
     return profiles[0] if profiles else DEFAULT_PROFILE
 
 
-def expand_query_terms(query: str, profile: DomainProfile | None = None, doc_ids: list[str] | None = None) -> str:
+def expand_query_terms(
+    query: str,
+    profile: DomainProfile | None = None,
+    doc_ids: list[str] | None = None,
+    include_route_hints: bool = True,
+) -> str:
     profile = profile or choose_profile(query, doc_ids=doc_ids)
     expansions: list[str] = []
     lowered = query.lower()
     for term, synonyms in profile.query_synonyms.items():
         if term in lowered:
             expansions.append(synonyms)
+    if include_route_hints:
+        expansions.extend(_route_hints(query))
     if not expansions:
         return query.strip()
 
@@ -171,6 +212,87 @@ def expand_query_terms(query: str, profile: DomainProfile | None = None, doc_ids
     return f"{query.strip()}\n检索关注：{'；'.join(ordered)}"
 
 
+def build_retrieval_queries(
+    query: str,
+    profile: DomainProfile | None = None,
+    doc_ids: list[str] | None = None,
+) -> list[str]:
+    profile = profile or choose_profile(query, doc_ids=doc_ids)
+    queries: list[str] = [
+        expand_query_terms(query, profile=profile, doc_ids=doc_ids, include_route_hints=False)
+    ]
+    queries.extend(_route_hints(query))
+
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for item in queries:
+        normalized = item.strip()
+        if not normalized or normalized in seen:
+            continue
+        seen.add(normalized)
+        ordered.append(normalized)
+    return ordered
+
+
+def _route_hints(query: str) -> list[str]:
+    normalized = query.lower()
+    hints: list[str] = []
+
+    if "rag" in normalized and any(term in normalized for term in ("区别", "对比", "问答", "大模型")):
+        hints.extend([
+            "RAG 的关键是先从知识库检索证据",
+            "再让大模型基于证据回答",
+            "普通大模型只依赖模型内部知识",
+        ])
+    if "chunk" in normalized and "分词" in normalized:
+        hints.extend([
+            "Chunk 不是中文分词",
+            "chunk 是较大的文本片段",
+            "分词通常是把句子切成词或 token",
+        ])
+    if "embedding" in normalized and any(term in normalized for term in ("整个文件", "chunk", "切分")):
+        hints.extend([
+            "Embedding 不是对整个文件只做一次",
+            "对切分后的 chunk 分别做 embedding",
+        ])
+    if ("reranker" in normalized or "重排序" in normalized) and any(term in normalized for term in ("向量数据库", "区别", "分别")):
+        hints.extend([
+            "Reranker 不是向量数据库",
+            "向量数据库负责快速召回候选内容",
+            "reranker 负责对候选内容进行更精细的相关性排序",
+        ])
+    if "最小权限" in normalized or "无权限" in normalized or "doc_id" in normalized:
+        hints.extend([
+            "系统采用最小权限模型",
+            "用户只能看到自己有权访问的知识库",
+            "用户只能检索自己有权访问的文档",
+        ])
+    if any(term in normalized for term in ("引用校验", "可追溯", "依据不足")):
+        hints.extend([
+            "系统要求回答必须可追溯",
+            "而不是编造答案",
+        ])
+    if "llamaindex" in normalized and any(term in normalized for term in ("做了", "定位", "替代", "不是大模型", "没有替代")):
+        hints.extend([
+            "LlamaIndex 在星澜知识助手中不是大模型",
+            "将系统已有的 chunk 包装成 LlamaIndex Document",
+            "构建临时 VectorStoreIndex",
+            "使用 LlamaIndex retriever 从指定文档范围内召回相关 node",
+            "将 node 转回系统统一的 SearchHit",
+            "LlamaIndex 没有替代文档解析",
+        ])
+    if "bm25" in normalized and any(term in normalized for term in ("向量检索", "reranker", "比较", "区别")):
+        hints.extend([
+            "BM25 是一种经典关键词检索算法",
+            "向量检索是一种语义检索方式",
+            "BM25 和向量检索通常不是替代关系",
+            "互补关系",
+            "推荐做法是混合检索",
+            "reranker 负责对候选内容进行更精细的相关性排序",
+        ])
+    return hints
+
+
 def _focus_terms(query: str, profile: DomainProfile) -> list[str]:
     candidates = [
         term for term in extract_terms(query)
@@ -178,6 +300,13 @@ def _focus_terms(query: str, profile: DomainProfile) -> list[str]:
     ]
     candidates.sort(key=len, reverse=True)
     return candidates[:4]
+
+
+def _is_abstract_explanation_query(query: str) -> bool:
+    normalized = query.lower()
+    technical_terms = ("rag", "chunk", "embedding", "reranker", "bm25", "向量检索", "llamaindex")
+    abstract_markers = ("为什么", "区别", "对比", "比较", "是什么", "什么是", "是否", "分别", "作用")
+    return any(term in normalized for term in technical_terms) and any(marker in normalized for marker in abstract_markers)
 
 
 def filter_hits_by_focus(
@@ -198,6 +327,10 @@ def filter_hits_by_focus(
         hit for hit in hits
         if any(term.lower() in hit["content"].lower() for term in focus_terms)
     ]
+    if _is_abstract_explanation_query(query) and matched:
+        matched_ids = {id(hit) for hit in matched}
+        unmatched = [hit for hit in hits if id(hit) not in matched_ids]
+        return matched + unmatched
     return matched or hits
 
 
@@ -264,6 +397,8 @@ def is_underspecified_query(query: str, profile: DomainProfile | None = None, do
     profile = profile or choose_profile(query, doc_ids=doc_ids)
     normalized = query.strip().lower()
     if extract_explicit_objects(query, profile=profile, doc_ids=doc_ids):
+        return False
+    if any(term in normalized for term in _EXPLICIT_QUERY_ANCHORS):
         return False
     return any(term in normalized for term in profile.ambiguous_query_terms)
 

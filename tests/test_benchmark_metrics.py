@@ -12,6 +12,7 @@ evaluate_row = _MODULE.evaluate_row
 infer_case_categories = _MODULE.infer_case_categories
 summarize_metrics = _MODULE.summarize_metrics
 summarize_by_category = _MODULE.summarize_by_category
+to_markdown = _MODULE._to_markdown
 
 
 def test_profile_default_eval_set_resolution(monkeypatch):
@@ -84,6 +85,35 @@ def test_evaluate_row_supports_expected_refusal():
     assert evaluation["refused"] is True
 
 
+def test_evaluate_row_does_not_treat_policy_mentions_as_refusal():
+    case = {
+        "required_answer_terms": ["回答必须可追溯", "不能编造答案"],
+        "relevant_source_terms": ["系统要求回答必须可追溯", "而不是编造答案"],
+    }
+    row = {
+        "answer": "系统要求回答必须可追溯；如果检索不到直接证据，应该说明依据不足，不能编造答案。",
+        "sources": [{"content": "系统要求回答必须可追溯。如果检索不到直接证据，系统应该明确说明依据不足，而不是编造答案。"}],
+    }
+
+    evaluation = evaluate_row(row, case, k=5)
+
+    assert evaluation["answer_correct"] is True
+    assert evaluation["refused"] is False
+
+
+def test_evaluate_row_recognizes_no_related_info_refusal():
+    case = {"expected_refusal": True}
+    row = {
+        "answer": "参考内容中没有涉及食堂菜单的相关信息。",
+        "sources": [],
+    }
+
+    evaluation = evaluate_row(row, case, k=5)
+
+    assert evaluation["answer_correct"] is True
+    assert evaluation["refused"] is True
+
+
 def test_summarize_metrics_aggregates_rates():
     rows = [
         {"evaluation": {"answer_correct": True, "answer_score": 1.0, "recall_at_k": 1.0, "mrr": 1.0, "ndcg_at_k": 1.0, "refused": False, "hallucinated": False}},
@@ -122,3 +152,60 @@ def test_summarize_by_category_groups_rows():
     assert summary["参数抽取"]["case_count"] == 2
     assert summary["参数抽取"]["answer_accuracy"] == 0.5
     assert summary["多事实"]["case_count"] == 1
+
+
+def test_to_markdown_uses_chinese_labels():
+    payload = {
+        "filename": "rag_quality_test.docx",
+        "doc_id": "d1",
+        "eval_set": "docs/rag_quality_eval_set.json",
+        "retrieval_backend": "llamaindex",
+        "mode": "qa",
+        "api_base": "",
+        "k": 5,
+        "question_count": 1,
+        "summary": {
+            "case_count": 1,
+            "answer_accuracy": 1.0,
+            "avg_answer_score": 1.0,
+            "avg_recall_at_k": 1.0,
+            "avg_mrr": 1.0,
+            "avg_ndcg_at_k": 1.0,
+            "refusal_rate": 0.0,
+            "hallucination_rate": 0.0,
+        },
+        "category_summary": {},
+        "results": [
+            {
+                "index": 1,
+                "question": "示例问题",
+                "case_id": "case_1",
+                "categories": ["参数抽取"],
+                "elapsed_seconds": 1.23,
+                "source_count": 1,
+                "answer": "示例答案",
+                "sources": [{"filename": "a.pdf", "page": 1, "content": "示例引用"}],
+                "evaluation": {
+                    "answer_score": 1.0,
+                    "answer_correct": True,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "ndcg_at_k": 1.0,
+                    "refused": False,
+                    "hallucinated": False,
+                    "unsupported_numbers": [],
+                    "quality_issues": [],
+                },
+            }
+        ],
+    }
+
+    md = to_markdown(payload)
+
+    assert "# RAG Benchmark 结果" in md
+    assert "- 文档 ID：" in md
+    assert "- 总体结果" not in md  # ensure heading formatting is separate
+    assert "答案准确率" in md
+    assert "召回率@5" in md
+    assert "答案正确" in md
+    assert "质量问题" in md
