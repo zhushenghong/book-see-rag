@@ -12,6 +12,30 @@ from book_see_rag.vectorstore.milvus_store import SearchHit, get_doc_hits
 logger = logging.getLogger("uvicorn.error")
 
 
+def _vector_subqueries(query: str) -> list[str]:
+    """
+    Build focused embedding queries: first user line + 检索关注 sub-clauses.
+    Multi-line expansion improves recall for contrast/definition questions without
+    polluting the primary keyword/BM25 path (still uses full query string there).
+    """
+    raw = (query or "").strip()
+    if not raw:
+        return []
+    primary = raw.split("\n", 1)[0].strip() or raw
+    out: list[str] = [primary]
+    if "\n" not in raw:
+        return out
+    tail = raw.split("\n", 1)[1]
+    if "检索关注：" not in tail:
+        return out
+    blob = tail.split("检索关注：", 1)[1].strip()
+    for piece in blob.replace(";", "；").split("；"):
+        p = piece.strip()
+        if p and p not in out:
+            out.append(p)
+    return out
+
+
 class LlamaIndexUnavailable(RuntimeError):
     pass
 
@@ -90,21 +114,23 @@ def search_hits_with_llamaindex(query: str, doc_ids: list[str] | None = None) ->
         embed_model=_build_embedding_model(BaseEmbedding),
         show_progress=False,
     )
-    nodes = index.as_retriever(similarity_top_k=settings.llamaindex_top_k).retrieve(query)
-
+    retriever = index.as_retriever(similarity_top_k=settings.llamaindex_top_k)
     vector_hits: list[SearchHit] = []
-    for node_with_score in nodes:
-        node = node_with_score.node
-        metadata = node.metadata or {}
-        vector_hits.append(
-            {
-                "doc_id": metadata.get("doc_id", ""),
-                "filename": metadata.get("filename", ""),
-                "page": int(metadata.get("page") or 0),
-                "content": node.get_content(metadata_mode="none"),
-                "score": float(node_with_score.score or 0.0),
-            }
-        )
+    for subq in _vector_subqueries(query):
+        batch: list[SearchHit] = []
+        for node_with_score in retriever.retrieve(subq):
+            node = node_with_score.node
+            metadata = node.metadata or {}
+            batch.append(
+                {
+                    "doc_id": metadata.get("doc_id", ""),
+                    "filename": metadata.get("filename", ""),
+                    "page": int(metadata.get("page") or 0),
+                    "content": node.get_content(metadata_mode="none"),
+                    "score": float(node_with_score.score or 0.0),
+                }
+            )
+        vector_hits = merge_ranked_hits(vector_hits, batch)
     window_top_k = getattr(settings, "retrieval_window_top_k", settings.llamaindex_top_k)
     section_hits = section_window_hits(query, keyword_pool, window_top_k)
     sentence_hits = sentence_window_hits(query, keyword_pool, window_top_k)

@@ -5,7 +5,7 @@ from book_see_rag.chains.answer_cleanup import clean_answer_text
 from book_see_rag.chains.answer_guardrails import find_unsupported_numbers
 from book_see_rag.chains.answer_quality import inspect_answer_quality
 from book_see_rag.chains.evidence_brief import build_evidence_brief
-from book_see_rag.chains.refusal import EVIDENCE_REFUSAL_MESSAGE, canonicalize_refusal_text
+from book_see_rag.chains.refusal import EVIDENCE_REFUSAL_MESSAGE, canonicalize_refusal_text, repair_citation_policy_refusal
 from book_see_rag.query_understanding import (
     choose_profile,
     detect_ambiguous_objects,
@@ -22,6 +22,7 @@ from book_see_rag.retrieval import (
     keyword_rank_hits,
     merge_ranked_hits,
     prefilter_hits,
+    prioritize_chunk_tokenization_hits,
     section_window_hits,
     sentence_window_hits,
 )
@@ -624,6 +625,47 @@ def test_evidence_directly_supports_allows_permission_evidence():
     assert evidence_directly_supports("研发员工李明能访问哪些知识库？不能访问哪个知识库？", hits) is True
 
 
+def test_evidence_directly_supports_allows_citation_check_question():
+    hits = [
+        {
+            "doc_id": "d1",
+            "filename": "policy.md",
+            "page": 1,
+            "content": "系统要求回答必须可追溯；若依据不足须说明，不能编造。",
+            "score": 0.8,
+        },
+    ]
+    assert evidence_directly_supports("系统为什么需要引用校验？", hits) is True
+
+
+def test_prioritize_chunk_tokenization_hits_moves_definition_first():
+    noise = {"doc_id": "d1", "filename": "x.md", "page": 1, "content": "向量检索召回候选。", "score": 0.9}
+    definition = {
+        "doc_id": "d1",
+        "filename": "x.md",
+        "page": 2,
+        "content": "Chunk 不是中文分词；分词通常是把句子切成词。",
+        "score": 0.3,
+    }
+    q = "chunk 和中文分词有什么区别？"
+    out = prioritize_chunk_tokenization_hits(q, [noise, definition])
+    assert out[0]["content"] == definition["content"]
+
+
+def test_repair_citation_policy_refusal_replaces_false_evidence_refusal():
+    q = "系统为什么需要引用校验？"
+    ctx = "可追溯、依据不足、编造"
+    fixed = repair_citation_policy_refusal(q, ctx, EVIDENCE_REFUSAL_MESSAGE)
+    assert "可追溯" in fixed
+    assert fixed != EVIDENCE_REFUSAL_MESSAGE
+
+
+def test_repair_citation_policy_refusal_noop_without_policy_signals():
+    q = "系统为什么需要引用校验？"
+    ctx = "仅与食堂菜单相关。"
+    assert repair_citation_policy_refusal(q, ctx, EVIDENCE_REFUSAL_MESSAGE) == EVIDENCE_REFUSAL_MESSAGE
+
+
 def test_canonicalize_refusal_text_does_not_rewrite_legitimate_negative_facts():
     answer = "LlamaIndex 没有替代文档解析、权限控制和最终回答生成。"
 
@@ -776,3 +818,19 @@ def test_build_evidence_brief_extracts_relevant_sentences():
     assert "先从知识库检索证据" in brief
     assert "基于证据回答" in brief
     assert "普通大模型问答" in brief
+
+
+def test_build_evidence_brief_prioritizes_anchor_phrases_with_extra_queries():
+    question = "chunk 和中文分词是一回事吗？为什么？"
+    chunks = [
+        "本节只讲 chunk_size。",
+        "Chunk 不是中文分词，chunk 是较大的文本片段。分词通常是把句子切成词或 token。",
+    ]
+    brief = build_evidence_brief(
+        question,
+        chunks,
+        extra_queries=["Chunk 不是中文分词"],
+    )
+
+    assert "不是中文分词" in brief
+    assert ("较大的文本片段" in brief or "分词通常是把句子切成词" in brief)

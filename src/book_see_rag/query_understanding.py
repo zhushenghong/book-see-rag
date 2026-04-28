@@ -62,6 +62,7 @@ DEFAULT_PROFILE = DomainProfile(
         "引用校验": "回答必须可追溯 如果检索不到直接证据 不能编造答案 依据不足",
         "可追溯": "回答必须可追溯 不能编造答案",
         "rag": "RAG 不是单纯的大模型问答 先检索再回答 先从知识库检索证据 基于证据回答",
+        "大模型问答": "RAG 的关键是先从知识库检索证据 再让大模型基于证据回答 普通大模型只依赖模型内部知识",
         "chunk": "chunk 不是中文分词 文本片段 长文档 片段",
         "embedding": "embedding 通常对 chunk 分别做 计算向量",
         "reranker": "reranker 负责对候选证据排序 相关性排序",
@@ -238,11 +239,16 @@ def _route_hints(query: str) -> list[str]:
     normalized = query.lower()
     hints: list[str] = []
 
-    if "rag" in normalized and any(term in normalized for term in ("区别", "对比", "问答", "大模型")):
+    if (
+        "rag" in normalized
+        or "检索增强" in normalized
+        or "大模型问答" in normalized
+    ) and any(term in normalized for term in ("区别", "对比", "不同", "问答", "相比")):
         hints.extend([
             "RAG 的关键是先从知识库检索证据",
             "再让大模型基于证据回答",
             "普通大模型只依赖模型内部知识",
+            "大模型只能基于检索到的证据回答",
         ])
     if "chunk" in normalized and "分词" in normalized:
         hints.extend([
@@ -267,9 +273,14 @@ def _route_hints(query: str) -> list[str]:
             "用户只能看到自己有权访问的知识库",
             "用户只能检索自己有权访问的文档",
         ])
-    if any(term in normalized for term in ("引用校验", "可追溯", "依据不足")):
+    if any(term in normalized for term in ("引用校验", "可追溯", "依据不足")) or (
+        "引用" in normalized
+        and any(term in normalized for term in ("不支持结论", "没有引用", "结论"))
+    ):
         hints.extend([
             "系统要求回答必须可追溯",
+            "如果检索不到直接证据",
+            "应该明确说明依据不足",
             "而不是编造答案",
         ])
     if "llamaindex" in normalized and any(term in normalized for term in ("做了", "定位", "替代", "不是大模型", "没有替代")):
@@ -289,6 +300,23 @@ def _route_hints(query: str) -> list[str]:
             "互补关系",
             "推荐做法是混合检索",
             "reranker 负责对候选内容进行更精细的相关性排序",
+        ])
+    if any(term in normalized for term in ("单纯向量", "向量检索")) and any(
+        term in normalized for term in ("精确术语", "漏掉", "为什么")
+    ):
+        hints.extend([
+            "单纯向量检索可能漏掉精确术语",
+            "BM25 擅长精确匹配",
+        ])
+    if "为什么" in normalized and (
+        "最小权限" in normalized or ("企业" in normalized and "rag" in normalized)
+    ):
+        hints.extend([
+            "系统采用最小权限模型",
+            "用户只能看到自己有权访问的知识库",
+            "用户只能检索自己有权访问的文档",
+            "权限风险",
+            "越权检索",
         ])
     return hints
 

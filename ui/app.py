@@ -235,7 +235,7 @@ with st.sidebar:
     st.title("📚 book-see-rag")
     st.caption(f"Session: `{st.session_state.session_id[:8]}...`")
     st.subheader("当前用户")
-    st.session_state.user_id = st.text_input("User ID", value=st.session_state.user_id)
+    st.session_state.user_id = st.text_input("User ID", value=st.session_state.user_id, autocomplete="off")
     st.session_state.role = st.selectbox("Role", ["employee", "hr_admin"], index=["employee", "hr_admin"].index(st.session_state.role) if st.session_state.role in ["employee", "hr_admin"] else 0)
     st.session_state.department = st.selectbox("Department", ["general", "rd", "hr"], index=["general", "rd", "hr"].index(st.session_state.department) if st.session_state.department in ["general", "rd", "hr"] else 0)
     st.divider()
@@ -243,12 +243,12 @@ with st.sidebar:
     kb_options = api("GET", "/knowledge-bases") or []
     if st.session_state.role == "hr_admin":
         with st.expander("新增知识库", expanded=False):
-            new_kb_id = st.text_input("kb_id", placeholder="例如：kb_finance", key="new_kb_id")
-            new_kb_name = st.text_input("名称", placeholder="例如：财务知识库", key="new_kb_name")
+            new_kb_id = st.text_input("kb_id", placeholder="例如：kb_finance", key="new_kb_id", autocomplete="off")
+            new_kb_name = st.text_input("名称", placeholder="例如：财务知识库", key="new_kb_name", autocomplete="off")
             new_kb_visibility = st.selectbox("可见范围", ["public", "department", "private"], key="new_kb_visibility")
-            new_kb_departments = st.text_input("允许部门", placeholder="多个用逗号分隔，如：rd,hr", key="new_kb_departments")
-            new_kb_roles = st.text_input("允许角色", placeholder="多个用逗号分隔，如：hr_admin", key="new_kb_roles")
-            new_kb_user_ids = st.text_input("允许用户", placeholder="多个用逗号分隔，如：alice,bob", key="new_kb_user_ids")
+            new_kb_departments = st.text_input("允许部门", placeholder="多个用逗号分隔，如：rd,hr", key="new_kb_departments", autocomplete="off")
+            new_kb_roles = st.text_input("允许角色", placeholder="多个用逗号分隔，如：hr_admin", key="new_kb_roles", autocomplete="off")
+            new_kb_user_ids = st.text_input("允许用户", placeholder="多个用逗号分隔，如：alice,bob", key="new_kb_user_ids", autocomplete="off")
             if st.button("创建知识库", key="create_kb_btn"):
                 result = api("POST", "/knowledge-bases", json={
                     "kb_id": new_kb_id,
@@ -378,7 +378,7 @@ with tab_qa:
 # ── 摘要 Tab ──────────────────────────────────────────────────
 with tab_summary:
     st.subheader("文档摘要")
-    topic = st.text_input("摘要主题（可选）", placeholder="留空则摘要整体内容", key="sum_topic")
+    topic = st.text_input("摘要主题（可选）", placeholder="留空则摘要整体内容", key="sum_topic", autocomplete="off")
     if st.button("生成摘要", key="sum_btn"):
         with st.spinner("生成中..."):
             result = api("POST", "/query", json={
@@ -392,7 +392,7 @@ with tab_summary:
 # ── 知识提取 Tab ──────────────────────────────────────────────
 with tab_extract:
     st.subheader("结构化知识提取")
-    ext_query = st.text_input("提取主题", placeholder="主要知识点", key="ext_q")
+    ext_query = st.text_input("提取主题", placeholder="主要知识点", key="ext_q", autocomplete="off")
     if st.button("提取知识", key="ext_btn"):
         with st.spinner("提取中..."):
             result = api("POST", "/query", json={

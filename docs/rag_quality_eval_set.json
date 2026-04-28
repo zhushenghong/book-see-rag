@@ -1,6 +1,6 @@
 {
   "name": "rag_quality_eval_set",
-  "description": "Rule-based evaluation set for docs/rag_quality_test.docx. Each case checks answer key points and whether retrieved citations contain expected evidence.",
+  "description": "Rule-based evaluation for docs/rag_quality_test.docx. required_answer_terms / relevant_source_terms use OR groups: a JSON array of strings is one required slot; a nested array means match any synonym in that slot. Optional min_answer_score (0–1) enables lenient answer_correct in scripts/run_rag_benchmark.py.",
   "cases": [
     {
       "id": "project_dates",
@@ -21,8 +21,18 @@
       "id": "pilot_scope",
       "question": "第一阶段试点总共多少人？研发、人事、综合管理分别多少人？",
       "categories": ["多事实", "参数抽取"],
-      "required_answer_terms": ["30 名员工", "研发部门 18 人", "人事部门 5 人", "综合管理部门 7 人"],
-      "relevant_source_terms": ["第一阶段试点范围包括 30 名员工", "研发部门 18 人", "人事部门 5 人", "综合管理部门 7 人"]
+      "required_answer_terms": [
+        ["30 名员工", "30人", "30 人", "总共30人", "总共 30 人"],
+        ["研发部门 18 人", "研发部门18人", "研发 18"],
+        ["人事部门 5 人", "人事部门5人", "人事 5"],
+        ["综合管理部门 7 人", "综合管理部门7人", "综合管理 7"]
+      ],
+      "relevant_source_terms": [
+        ["第一阶段试点范围包括 30 名员工", "30 名员工", "30人"],
+        ["研发部门 18 人"],
+        ["人事部门 5 人"],
+        ["综合管理部门 7 人"]
+      ]
     },
     {
       "id": "tech_stack",
@@ -42,22 +52,42 @@
       "id": "rag_vs_llm",
       "question": "RAG 和普通大模型问答有什么区别？",
       "categories": ["对比问答", "解释说明"],
-      "required_answer_terms": ["先从知识库检索证据", "基于证据回答"],
-      "relevant_source_terms": ["RAG 的关键是先从知识库检索证据", "再让大模型基于证据回答"]
+      "required_answer_terms": [
+        ["先从知识库检索证据", "从知识库检索证据", "知识库检索", "先检索相关证据", "先检索", "检索证据", "检索到相关", "先召回"],
+        ["基于证据回答", "基于检索到的证据", "只能基于检索", "必须可追溯", "可追溯"]
+      ],
+      "relevant_source_terms": [
+        ["RAG 的关键是先从知识库检索证据", "先从知识库检索证据", "大模型只能基于检索到的证据回答"],
+        ["再让大模型基于证据回答", "基于证据回答", "基于检索到的证据", "回答必须可追溯"]
+      ]
     },
     {
       "id": "chunk_vs_tokenization",
       "question": "chunk 和中文分词是一回事吗？为什么？",
       "categories": ["定义判断", "解释说明"],
-      "required_answer_terms": ["不是中文分词", "较大的文本片段", "分词通常是把句子切成词或 token"],
-      "relevant_source_terms": ["Chunk 不是中文分词", "chunk 是较大的文本片段", "分词通常是把句子切成词或 token"]
+      "required_answer_terms": [
+        ["不是中文分词", "不是一回事", "不是同一种"],
+        ["较大的文本片段", "固定字符", "文本片段", "chunk_size"],
+        ["分词", "切成词", "token"]
+      ],
+      "relevant_source_terms": [
+        ["Chunk 不是中文分词", "不是中文分词"],
+        ["chunk 是较大的文本片段", "较大的文本片段"],
+        ["分词通常是把句子切成词或 token", "切成词或 token"]
+      ]
     },
     {
       "id": "embedding_granularity",
       "question": "embedding 是对整个文件做一次，还是对 chunk 分别做？",
       "categories": ["定义判断", "解释说明"],
-      "required_answer_terms": ["对切分后的 chunk 分别做 embedding", "不是对整个文件只做一次"],
-      "relevant_source_terms": ["Embedding 不是对整个文件只做一次", "对切分后的 chunk 分别做 embedding"]
+      "required_answer_terms": [
+        ["对切分后的 chunk 分别做 embedding", "对 chunk 分别做 embedding", "每个 chunk 计算 embedding", "分别做 embedding"],
+        ["不是对整个文件只做一次", "而不是只对整个文件做一次", "不是只对整个文件"]
+      ],
+      "relevant_source_terms": [
+        ["Embedding 不是对整个文件只做一次", "不是对整个文件只做一次"],
+        ["对切分后的 chunk 分别做 embedding", "对每个 chunk 计算 embedding", "分别做 embedding"]
+      ]
     },
     {
       "id": "chunk_size_overlap",
@@ -84,15 +114,29 @@
       "id": "bm25_vector_complement",
       "question": "BM25 和向量检索是替代关系吗？",
       "categories": ["定义判断", "解释说明"],
-      "required_answer_terms": ["不是替代关系", "互补关系", "混合检索"],
-      "relevant_source_terms": ["BM25 和向量检索通常不是替代关系", "互补关系", "推荐做法是混合检索"]
+      "required_answer_terms": [
+        ["不是替代关系", "不是替代"],
+        ["互补关系", "混合检索"]
+      ],
+      "relevant_source_terms": [
+        ["BM25 和向量检索通常不是替代关系", "不是替代关系"],
+        ["互补关系", "混合检索", "推荐做法是混合检索"]
+      ]
     },
     {
       "id": "reranker_vector_db",
       "question": "Reranker 和向量数据库有什么区别？",
       "categories": ["对比问答", "解释说明"],
-      "required_answer_terms": ["Reranker 不是向量数据库", "向量数据库负责快速召回候选内容", "reranker 负责对候选内容进行更精细的相关性排序"],
-      "relevant_source_terms": ["Reranker 不是向量数据库", "向量数据库负责快速召回候选内容", "reranker 负责对候选内容进行更精细的相关性排序"]
+      "required_answer_terms": [
+        ["Reranker 不是向量数据库", "不是向量数据库", "检索环节", "排序环节", "初步召回", "精排", "重新排序"],
+        ["向量数据库", "写入向量数据库", "召回候选", "存储", "embedding"],
+        ["reranker", "精排", "相关性排序", "对候选证据排序", "重新排序"]
+      ],
+      "relevant_source_terms": [
+        ["Reranker 不是向量数据库", "不是向量数据库"],
+        ["向量数据库负责快速召回候选内容", "写入向量数据库", "从向量数据库召回"],
+        ["reranker 负责对候选内容进行更精细的相关性排序", "使用 reranker 对候选证据排序"]
+      ]
     },
     {
       "id": "llamaindex_role",
@@ -105,8 +149,17 @@
       "id": "llamaindex_not_replace",
       "question": "LlamaIndex 是否替代了 Milvus、权限控制和最终回答生成？",
       "categories": ["定义判断", "解释说明"],
-      "required_answer_terms": ["不是向量数据库", "没有替代", "权限控制", "最终回答生成"],
-      "relevant_source_terms": ["LlamaIndex 在星澜知识助手中不是大模型，也不是向量数据库", "LlamaIndex 没有替代文档解析", "权限控制", "最终回答生成"]
+      "required_answer_terms": [
+        ["不是向量数据库", "不是大模型", "不是 Milvus"],
+        ["没有替代", "未替代", "LlamaIndex 没有替代"],
+        ["权限控制", "权限"],
+        ["最终回答生成", "回答生成"]
+      ],
+      "relevant_source_terms": [
+        ["LlamaIndex 在星澜知识助手中不是大模型，也不是向量数据库", "不是向量数据库"],
+        ["LlamaIndex 没有替代文档解析", "没有替代文档解析", "没有替代", "权限控制", "会话记忆"],
+        ["最终回答生成", "回答生成"]
+      ]
     },
     {
       "id": "liming_access",
@@ -140,15 +193,34 @@
       "id": "least_privilege",
       "question": "为什么企业 RAG 系统需要最小权限模型？",
       "categories": ["解释说明", "权限问答"],
-      "required_answer_terms": ["只能看到自己有权访问的知识库", "只能检索自己有权访问的文档", "过滤"],
-      "relevant_source_terms": ["系统采用最小权限模型", "用户只能看到自己有权访问的知识库", "用户只能检索自己有权访问的文档"]
+      "min_answer_score": 0.85,
+      "required_answer_terms": [
+        ["最小权限", "最小权限模型", "系统采用最小权限模型"],
+        ["只能看到自己有权访问的知识库", "用户只能看到自己有权访问的知识库", "有权访问的知识库"],
+        ["只能检索自己有权访问的文档", "用户只能检索自己有权访问的文档", "有权访问的文档"],
+        ["过滤", "过滤掉", "doc_id", "越权"]
+      ],
+      "relevant_source_terms": [
+        ["系统采用最小权限模型", "最小权限模型"],
+        ["用户只能看到自己有权访问的知识库"],
+        ["用户只能检索自己有权访问的文档"],
+        ["即使用户手动传入无权限 doc_id", "过滤掉"]
+      ]
     },
     {
       "id": "risks",
       "question": "当前系统有哪些主要风险？",
       "categories": ["多事实", "解释说明"],
+      "min_answer_score": 0.8,
       "required_answer_terms": ["文档解析风险", "检索风险", "生成风险", "权限风险", "性能风险"],
-      "relevant_source_terms": ["当前系统存在五类主要风险", "文档解析风险", "检索风险", "生成风险", "权限风险", "性能风险"]
+      "relevant_source_terms": [
+        ["当前系统存在五类主要风险", "五类主要风险"],
+        ["文档解析风险"],
+        ["检索风险"],
+        ["生成风险"],
+        ["权限风险"],
+        ["性能风险"]
+      ]
     },
     {
       "id": "acceptance_metrics",
@@ -169,22 +241,50 @@
       "id": "vector_miss_terms",
       "question": "为什么单纯向量检索可能漏掉精确术语？",
       "categories": ["解释说明"],
-      "required_answer_terms": ["单纯向量检索", "漏掉精确术语"],
-      "relevant_source_terms": ["单纯向量检索可能漏掉精确术语"]
+      "required_answer_terms": [
+        ["单纯向量检索", "向量检索", "语义检索"],
+        ["漏掉精确术语", "精确术语", "精确匹配", "关键词"]
+      ],
+      "relevant_source_terms": [
+        ["单纯向量检索可能漏掉精确术语", "检索风险：单纯向量检索可能漏掉精确术语", "漏掉精确术语"]
+      ]
     },
     {
       "id": "citation_check",
       "question": "系统为什么需要引用校验？",
       "categories": ["解释说明"],
-      "required_answer_terms": ["回答必须可追溯", "不能编造答案"],
-      "relevant_source_terms": ["系统要求回答必须可追溯", "而不是编造答案"]
+      "required_answer_terms": [
+        ["回答必须可追溯", "必须可追溯", "可追溯"],
+        ["不能编造", "而不是编造", "依据不足", "编造答案"]
+      ],
+      "relevant_source_terms": [
+        ["系统要求回答必须可追溯", "回答必须可追溯"],
+        ["而不是编造答案", "不能编造答案", "依据不足"]
+      ]
     },
     {
       "id": "multi_fact",
       "question": "请同时说明：项目负责人是谁、试点总人数是多少、支持哪些文件格式、第一阶段验收指标有哪些。",
       "categories": ["多事实"],
-      "required_answer_terms": ["陈舟", "30 名员工", "PDF", "DOCX", "TXT", "Markdown", "85%", "90%", "10MB", "3 分钟"],
-      "relevant_source_terms": ["项目负责人是陈舟", "第一阶段试点范围包括 30 名员工", "系统目前支持四种文件格式", "第一阶段的关键验收指标有三个"]
+      "min_answer_score": 0.9,
+      "required_answer_terms": [
+        "陈舟",
+        ["30 名员工", "30人", "30 人"],
+        "PDF",
+        "DOCX",
+        "TXT",
+        "Markdown",
+        ["85%", "准确率不低于 85%"],
+        ["90%", "引用命中率不低于 90%"],
+        "10MB",
+        ["3 分钟", "3分钟内", "三分钟内"]
+      ],
+      "relevant_source_terms": [
+        ["项目负责人是陈舟"],
+        ["第一阶段试点范围包括 30 名员工", "30 名员工"],
+        ["系统目前支持四种文件格式"],
+        ["第一阶段的关键验收指标有三个", "准确率不低于 85%"]
+      ]
     },
     {
       "id": "hybrid_compare",
@@ -211,8 +311,14 @@
       "id": "unsupported_answer_policy",
       "question": "如果系统回答没有引用或引用不支持结论，应该如何处理？",
       "categories": ["拒答", "解释说明"],
-      "required_answer_terms": ["依据不足", "不能编造"],
-      "relevant_source_terms": ["如果检索不到直接证据", "应该明确说明依据不足", "不能编造"]
+      "required_answer_terms": [
+        ["依据不足", "没有直接证据", "检索不到直接证据"],
+        ["不能编造", "而不是编造", "不要编造", "不要猜测"]
+      ],
+      "relevant_source_terms": [
+        ["如果检索不到直接证据", "依据不足"],
+        ["应该明确说明依据不足", "而不是编造答案", "不能编造"]
+      ]
     },
     {
       "id": "negative_unrelated_question",

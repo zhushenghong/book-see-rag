@@ -43,8 +43,10 @@ def test_evaluate_row_scores_answer_and_retrieval_metrics():
     evaluation = evaluate_row(row, case, k=2)
 
     assert evaluation["answer_correct"] is True
+    assert evaluation["answer_correct_lenient"] is True
     assert evaluation["answer_score"] == 1.0
     assert evaluation["recall_at_k"] == 1.0
+    assert evaluation["recall_in_retrieved"] == 1.0
     assert evaluation["mrr"] == 0.5
     assert evaluation["ndcg_at_k"] < 1.0
     assert evaluation["hallucinated"] is False
@@ -66,6 +68,21 @@ def test_evaluate_row_detects_hallucinated_numbers_and_forbidden_terms():
     assert evaluation["answer_correct"] is False
     assert evaluation["hallucinated"] is True
     assert evaluation["forbidden_matched_terms"] == 1
+
+
+def test_evaluate_row_respects_min_answer_score_for_lenient_correctness():
+    case = {
+        "required_answer_terms": ["项甲", "项乙", "项丙", "项丁"],
+        "relevant_source_terms": ["依据"],
+        "min_answer_score": 0.75,
+    }
+    row = {
+        "answer": "项甲项乙项丙",
+        "sources": [{"content": "依据"}],
+    }
+    ev = evaluate_row(row, case, k=5)
+    assert ev["answer_correct"] is False
+    assert ev["answer_correct_lenient"] is True
 
 
 def test_evaluate_row_supports_expected_refusal():
@@ -114,17 +131,56 @@ def test_evaluate_row_recognizes_no_related_info_refusal():
     assert evaluation["refused"] is True
 
 
+def test_evaluate_row_does_not_treat_chunk_explanation_as_refusal():
+    case = {
+        "required_answer_terms": ["不是中文分词"],
+        "relevant_source_terms": ["Chunk 不是中文分词"],
+    }
+    row = {
+        "answer": "参考内容中没有涉及中文分词的定义或概念，因此无法判断。",
+        "sources": [{"content": "Chunk 不是中文分词"}],
+    }
+    evaluation = evaluate_row(row, case, k=5)
+    assert evaluation["refused"] is False
+
+
 def test_summarize_metrics_aggregates_rates():
     rows = [
-        {"evaluation": {"answer_correct": True, "answer_score": 1.0, "recall_at_k": 1.0, "mrr": 1.0, "ndcg_at_k": 1.0, "refused": False, "hallucinated": False}},
-        {"evaluation": {"answer_correct": False, "answer_score": 0.5, "recall_at_k": 0.0, "mrr": 0.0, "ndcg_at_k": 0.0, "refused": True, "hallucinated": True}},
+        {
+            "evaluation": {
+                "answer_correct": True,
+                "answer_correct_lenient": True,
+                "answer_score": 1.0,
+                "recall_at_k": 1.0,
+                "recall_in_retrieved": 1.0,
+                "mrr": 1.0,
+                "ndcg_at_k": 1.0,
+                "refused": False,
+                "hallucinated": False,
+            }
+        },
+        {
+            "evaluation": {
+                "answer_correct": False,
+                "answer_correct_lenient": False,
+                "answer_score": 0.5,
+                "recall_at_k": 0.0,
+                "recall_in_retrieved": 0.0,
+                "mrr": 0.0,
+                "ndcg_at_k": 0.0,
+                "refused": True,
+                "hallucinated": True,
+            }
+        },
     ]
 
     summary = summarize_metrics(rows)
 
     assert summary["answer_accuracy"] == 0.5
+    assert summary["answer_accuracy_lenient"] == 0.5
     assert summary["avg_answer_score"] == 0.75
     assert summary["avg_recall_at_k"] == 0.5
+    assert summary["avg_recall_in_retrieved"] == 0.5
     assert summary["refusal_rate"] == 0.5
     assert summary["hallucination_rate"] == 0.5
 
@@ -142,9 +198,31 @@ def test_infer_case_categories_uses_question_heuristics():
 
 
 def test_summarize_by_category_groups_rows():
+    _ev_ok = {
+        "answer_correct": True,
+        "answer_correct_lenient": True,
+        "answer_score": 1.0,
+        "recall_at_k": 1.0,
+        "recall_in_retrieved": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_k": 1.0,
+        "refused": False,
+        "hallucinated": False,
+    }
+    _ev_bad = {
+        "answer_correct": False,
+        "answer_correct_lenient": False,
+        "answer_score": 0.5,
+        "recall_at_k": 0.0,
+        "recall_in_retrieved": 0.0,
+        "mrr": 0.0,
+        "ndcg_at_k": 0.0,
+        "refused": False,
+        "hallucinated": True,
+    }
     rows = [
-        {"categories": ["参数抽取"], "evaluation": {"answer_correct": True, "answer_score": 1.0, "recall_at_k": 1.0, "mrr": 1.0, "ndcg_at_k": 1.0, "refused": False, "hallucinated": False}},
-        {"categories": ["参数抽取", "多事实"], "evaluation": {"answer_correct": False, "answer_score": 0.5, "recall_at_k": 0.0, "mrr": 0.0, "ndcg_at_k": 0.0, "refused": False, "hallucinated": True}},
+        {"categories": ["参数抽取"], "evaluation": _ev_ok},
+        {"categories": ["参数抽取", "多事实"], "evaluation": _ev_bad},
     ]
 
     summary = summarize_by_category(rows)
@@ -167,8 +245,10 @@ def test_to_markdown_uses_chinese_labels():
         "summary": {
             "case_count": 1,
             "answer_accuracy": 1.0,
+            "answer_accuracy_lenient": 1.0,
             "avg_answer_score": 1.0,
             "avg_recall_at_k": 1.0,
+            "avg_recall_in_retrieved": 1.0,
             "avg_mrr": 1.0,
             "avg_ndcg_at_k": 1.0,
             "refusal_rate": 0.0,
@@ -188,7 +268,9 @@ def test_to_markdown_uses_chinese_labels():
                 "evaluation": {
                     "answer_score": 1.0,
                     "answer_correct": True,
+                    "answer_correct_lenient": True,
                     "recall_at_k": 1.0,
+                    "recall_in_retrieved": 1.0,
                     "mrr": 1.0,
                     "ndcg_at_k": 1.0,
                     "refused": False,
@@ -205,7 +287,7 @@ def test_to_markdown_uses_chinese_labels():
     assert "# RAG Benchmark 结果" in md
     assert "- 文档 ID：" in md
     assert "- 总体结果" not in md  # ensure heading formatting is separate
-    assert "答案准确率" in md
-    assert "召回率@5" in md
+    assert "答案准确率（严格）" in md
+    assert "召回率@5（Top-K）" in md
     assert "答案正确" in md
     assert "质量问题" in md

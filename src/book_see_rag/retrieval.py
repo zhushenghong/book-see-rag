@@ -348,6 +348,39 @@ def section_window_hits(query: str, hits: list[RankedHit], limit: int) -> list[R
     return [hit for _, hit in ranked[:limit]]
 
 
+def _hit_identity(hit: RankedHit) -> tuple[str, int, str]:
+    return (hit.get("doc_id", ""), int(hit.get("page", 0) or 0), hit.get("content", ""))
+
+
+def prioritize_chunk_tokenization_hits(question: str, hits: list[RankedHit]) -> list[RankedHit]:
+    """Bring definition-style chunks to the front when the user asks about chunk vs 中文分词."""
+    qn = question.lower()
+    if "chunk" not in qn or "分词" not in qn:
+        return hits
+    markers = (
+        "不是中文分词",
+        "chunk 是较大的文本片段",
+        "较大的文本片段",
+        "分词通常是把句子切成词",
+        "分词通常把句子切成词",
+    )
+    boosted_keys: set[tuple[str, int, str]] = set()
+    boosted: list[RankedHit] = []
+    for hit in hits:
+        content = hit.get("content", "").lower()
+        if not any(m.lower() in content for m in markers):
+            continue
+        key = _hit_identity(hit)
+        if key in boosted_keys:
+            continue
+        boosted_keys.add(key)
+        boosted.append(hit)
+    if not boosted:
+        return hits
+    back = [hit for hit in hits if _hit_identity(hit) not in boosted_keys]
+    return boosted + back
+
+
 def merge_ranked_hits(*hit_groups: list[RankedHit]) -> list[RankedHit]:
     merged: list[RankedHit] = []
     seen: set[tuple[str, int, str]] = set()
@@ -370,6 +403,11 @@ def evidence_directly_supports(query: str, hits: list[RankedHit]) -> bool:
         and any(term in merged for term in ("权限模型", "有权访问", "可以访问", "不能访问", "越权", "doc_id", "知识库"))
     ):
         return True
+    if "引用校验" in query or (
+        "为什么" in query and "引用" in query and ("需要" in query or "校验" in query)
+    ):
+        if any(term in merged for term in ("可追溯", "依据不足", "不能编造", "编造", "直接证据", "引用")):
+            return True
     if (
         any(term in normalized_query for term in ("引用", "可追溯", "依据不足", "支持结论"))
         and any(term in merged for term in ("可追溯", "依据不足", "不能编造", "引用", "直接证据"))

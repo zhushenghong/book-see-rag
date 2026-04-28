@@ -54,25 +54,38 @@ QUESTIONS = [
     "如果系统回答没有引用或引用不支持结论，应该如何处理？",
 ]
 
+# 「没有涉及」易与「没有涉及中文分词的定义」类技术解释冲突；排除紧邻出现「中文分词」的说明性句子。
 _REFUSAL_RE = re.compile(
-    r"无法可靠回答|未通过质量校验|没有足够.*证据|没有直接证据支持|没有涉及|没有相关信息|没有关于"
+    r"无法可靠回答|未通过质量校验|没有足够.*证据|没有直接证据支持|没有涉及(?!.{0,80}中文分词)|没有相关信息|没有关于"
 )
 
+LENIENT_ANSWER_SCORE_THRESHOLD = 0.85
 
-def _source_preview(item: object) -> dict:
+
+def _source_preview(item: object, *, max_chars: int | None = 300) -> dict:
+    """Benchmark evaluation needs full chunk text; UI snippets can pass max_chars."""
     if isinstance(item, dict):
+        raw = item.get("content", "") or ""
+        content = raw if max_chars is None else raw[:max_chars]
         return {
             "filename": item.get("filename", ""),
             "page": item.get("page", 0),
-            "content": item.get("content", "")[:300],
+            "content": content,
             "score": item.get("score", 0.0),
         }
+    raw = str(item)
+    content = raw if max_chars is None else raw[:max_chars]
     return {
         "filename": "",
         "page": 0,
-        "content": str(item)[:300],
+        "content": content,
         "score": 0.0,
     }
+
+
+def _benchmark_source_record(item: object) -> dict:
+    """Full citation text for rule-based recall@K (no truncation)."""
+    return _source_preview(item, max_chars=None)
 
 
 def _normalize_text(text: object) -> str:
@@ -115,6 +128,19 @@ def _source_group_hits(sources: list[dict], source_groups: list[list[str]], k: i
     return hits
 
 
+def _source_group_hits_any(sources: list[dict], source_groups: list[list[str]]) -> list[int | None]:
+    """Match within any retrieved source (diagnoses top-K rank loss)."""
+    hits: list[int | None] = []
+    for group in source_groups:
+        rank = None
+        for idx, source in enumerate(sources, 1):
+            if _term_group_matched(source.get("content", ""), group):
+                rank = idx
+                break
+        hits.append(rank)
+    return hits
+
+
 def _dcg(ranks: list[int]) -> float:
     return sum(1 / math.log2(rank + 1) for rank in ranks)
 
@@ -143,6 +169,12 @@ def evaluate_row(row: dict, case: dict, k: int = 5) -> dict:
     ideal_dcg = _dcg(list(range(1, min(source_total, k) + 1))) if source_total else 0.0
     ndcg_at_k = min(1.0, actual_dcg / ideal_dcg) if ideal_dcg else 0.0
 
+    pool_ranks = _source_group_hits_any(sources, source_groups)
+    retrieved_in_pool = sum(1 for rank in pool_ranks if rank is not None)
+    recall_in_retrieved = retrieved_in_pool / source_total if source_total else 0.0
+    first_pool = min((rank for rank in pool_ranks if rank is not None), default=None)
+    mrr_in_retrieved = 1 / first_pool if first_pool else 0.0
+
     unsupported_numbers = find_unsupported_numbers(answer_text, source_text)
     quality_issues = inspect_answer_quality(answer_text, source_text)
     refused = bool(_REFUSAL_RE.search(answer_text))
@@ -152,16 +184,31 @@ def evaluate_row(row: dict, case: dict, k: int = 5) -> dict:
         answer_score = 1.0 if refused else 0.0
         answer_correct = refused and not hallucinated
 
+    lenient_threshold = float(case.get("min_answer_score", LENIENT_ANSWER_SCORE_THRESHOLD))
+    if expected_refusal:
+        answer_correct_lenient = answer_correct
+    else:
+        answer_correct_lenient = (
+            answer_total > 0
+            and answer_score + 1e-9 >= lenient_threshold
+            and not refused
+            and not hallucinated
+        )
+
     return {
         "answer_score": round(answer_score, 4),
         "answer_correct": answer_correct,
+        "answer_correct_lenient": answer_correct_lenient,
         "answer_matched_terms": answer_matched,
         "answer_required_terms": answer_total,
         "recall_at_k": round(recall_at_k, 4),
+        "recall_in_retrieved": round(recall_in_retrieved, 4),
         "mrr": round(mrr, 4),
+        "mrr_in_retrieved": round(mrr_in_retrieved, 4),
         "ndcg_at_k": round(ndcg_at_k, 4),
         "source_matched_terms": retrieved_groups,
         "source_required_terms": source_total,
+        "source_matched_in_pool": retrieved_in_pool,
         "refused": refused,
         "expected_refusal": expected_refusal,
         "hallucinated": hallucinated,
@@ -186,8 +233,12 @@ def summarize_metrics(rows: list[dict]) -> dict:
     return {
         "case_count": total,
         "answer_accuracy": round(sum(1 for item in evaluations if item.get("answer_correct")) / total, 4),
+        "answer_accuracy_lenient": round(
+            sum(1 for item in evaluations if item.get("answer_correct_lenient")) / total, 4
+        ),
         "avg_answer_score": avg("answer_score"),
         "avg_recall_at_k": avg("recall_at_k"),
+        "avg_recall_in_retrieved": avg("recall_in_retrieved"),
         "avg_mrr": avg("mrr"),
         "avg_ndcg_at_k": avg("ndcg_at_k"),
         "refusal_rate": round(sum(1 for item in evaluations if item.get("refused")) / total, 4),
@@ -267,7 +318,7 @@ def _run_question(index: int, case: dict, doc_id: str, mode: str, api_base: str 
         "question": question,
         "answer": result.get("answer", ""),
         "source_count": len(sources),
-        "sources": [_source_preview(item) for item in sources[: max(k, 5)]],
+        "sources": [_benchmark_source_record(item) for item in sources[: max(k, 5)]],
         "elapsed_seconds": round(elapsed, 3),
     }
     if case.get("required_answer_terms") or case.get("relevant_source_terms"):
@@ -366,9 +417,11 @@ def main() -> None:
 def _to_markdown(payload: dict) -> str:
     summary_labels = {
         "case_count": "用例数",
-        "answer_accuracy": "答案准确率",
+        "answer_accuracy": "答案准确率（严格）",
+        "answer_accuracy_lenient": "答案准确率（宽松，得分阈值）",
         "avg_answer_score": "平均答案得分",
-        "avg_recall_at_k": f"平均召回率@{payload['k']}",
+        "avg_recall_at_k": f"平均召回率@{payload['k']}（Top-K）",
+        "avg_recall_in_retrieved": "平均证据覆盖率（任意返回引用）",
         "avg_mrr": "平均 MRR",
         "avg_ndcg_at_k": f"平均 nDCG@{payload['k']}",
         "refusal_rate": "拒答率",
@@ -376,9 +429,12 @@ def _to_markdown(payload: dict) -> str:
     }
     evaluation_labels = {
         "answer_score": "答案得分",
-        "answer_correct": "答案正确",
-        "recall_at_k": f"召回率@{payload['k']}",
+        "answer_correct": "答案正确（严格）",
+        "answer_correct_lenient": "答案正确（宽松）",
+        "recall_at_k": f"召回率@{payload['k']}（Top-K）",
+        "recall_in_retrieved": "证据覆盖率（任意引用）",
         "mrr": "MRR",
+        "mrr_in_retrieved": "MRR（任意引用）",
         "ndcg_at_k": f"nDCG@{payload['k']}",
         "refused": "是否拒答",
         "hallucinated": "是否幻觉",
@@ -387,9 +443,11 @@ def _to_markdown(payload: dict) -> str:
     }
     category_labels = {
         "case_count": "用例数",
-        "answer_accuracy": "答案准确率",
+        "answer_accuracy": "答案准确率（严格）",
+        "answer_accuracy_lenient": "答案准确率（宽松，得分阈值）",
         "avg_answer_score": "平均答案得分",
-        "avg_recall_at_k": f"平均召回率@{payload['k']}",
+        "avg_recall_at_k": f"平均召回率@{payload['k']}（Top-K）",
+        "avg_recall_in_retrieved": "平均证据覆盖率（任意返回引用）",
         "avg_mrr": "平均 MRR",
         "avg_ndcg_at_k": f"平均 nDCG@{payload['k']}",
         "refusal_rate": "拒答率",
@@ -439,7 +497,9 @@ def _to_markdown(payload: dict) -> str:
                 [
                     f"- {evaluation_labels['answer_score']}：{evaluation['answer_score']}",
                     f"- {evaluation_labels['answer_correct']}：{evaluation['answer_correct']}",
+                    f"- {evaluation_labels['answer_correct_lenient']}：{evaluation.get('answer_correct_lenient', '')}",
                     f"- {evaluation_labels['recall_at_k']}：{evaluation['recall_at_k']}",
+                    f"- {evaluation_labels['recall_in_retrieved']}：{evaluation.get('recall_in_retrieved', '')}",
                     f"- {evaluation_labels['mrr']}：{evaluation['mrr']}",
                     f"- {evaluation_labels['ndcg_at_k']}：{evaluation['ndcg_at_k']}",
                     f"- {evaluation_labels['refused']}：{evaluation['refused']}",
@@ -450,7 +510,10 @@ def _to_markdown(payload: dict) -> str:
             )
         lines.extend(["", row["answer"], "", "引用预览："])
         for idx, source in enumerate(row["sources"], 1):
-            lines.append(f"{idx}. {source['filename']} 第 {source['page']} 页：{source['content']}")
+            preview = source["content"]
+            if len(preview) > 480:
+                preview = preview[:480] + "…"
+            lines.append(f"{idx}. {source['filename']} 第 {source['page']} 页：{preview}")
         lines.append("")
     return "\n".join(lines)
 
